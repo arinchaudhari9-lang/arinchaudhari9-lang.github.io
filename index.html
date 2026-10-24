@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Hind Siliguri', sans-serif; }
-        /* দৈনিক চেকিং বাটন জোরপূর্বক সবুজ করার জন্য */
         #checkInBtn {
             background-color: #16a34a !important;
             color: #ffffff !important;
@@ -31,6 +30,7 @@
                 <a href="#" onclick="showTabContent('vip')" class="hover:underline">ভিআইপি প্যাকেজ</a>
                 <a href="#" onclick="showTabContent('refer')" class="hover:underline">রেফারেল</a>
                 <a href="#" onclick="showTabContent('appDownload')" class="hover:underline text-yellow-300 font-semibold">📲 অ্যাপস ডাউনলোড</a>
+                <a href="#" onclick="showTabContent('admin')" class="hover:underline text-red-300 font-semibold hidden" id="adminNavBtn">⚙️ অ্যাডমিন প্যানেল</a>
             </nav>
             <div id="authNavBtn"></div>
         </div>
@@ -74,8 +74,8 @@
                     <input type="password" id="regPass" required placeholder="**" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-600 outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-bold mb-1">রেফার কোড (যেমন: STARBD):</label>
-                    <input type="text" id="regRef" placeholder="রেফার কোড লিখুন (ঐচ্ছিক)" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-600 outline-none">
+                    <label class="block text-sm font-bold mb-1">রেফার কোড:</label>
+                    <input type="text" id="regRef" placeholder="রেফার কোড (ঐচ্ছিক)" class="w-full px-3 py-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-green-600 outline-none">
                 </div>
                 <p class="text-xs text-green-700 font-semibold">* একাউন্ট খুললেই পাবেন ১৫০ টাকা রেজিস্ট্রেশন বোনাস!</p>
                 <button type="submit" class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-800 transition">একাউন্ট তৈরি করুন</button>
@@ -133,7 +133,7 @@
                         <li>• সর্বনিম্ন রিচার্জ: ৫০০ টাকা | সর্বোচ্চ: ৫০,০০০ টাকা।</li>
                         <li>• সর্বনিম্ন উত্তোলন: ১৫০ টাকা (উত্তোলন চার্জ ১০%)।</li>
                         <li>• রিচার্জ না করলে উত্তোলন করা যাবে না।</li>
-                        <li>• প্রতিদিন একবার দৈনিক চেকিং থেকে ১৫ টাকা বোনাস নিন।</li>
+                        <li>• প্রতিদিন একবার (২৪ ঘণ্টায় একবার) দৈনিক চেকিং থেকে ১৫ টাকা বোনাস নিন।</li>
                         <li>• ভিআইপি প্যাকেজের প্রফিট প্রতি ২৪ ঘণ্টা পর অটোমেটিক ব্যালেন্সে যোগ হয়।</li>
                     </ul>
                 </div>
@@ -161,28 +161,27 @@
                 <h3 class="text-xl font-bold text-green-900">টাকা রিচার্জ (ডিপোজিট) করুন</h3>
                 <p class="text-sm text-gray-600">নিচের পার্সোনাল নম্বরে সেন্ড মানি করার পর নম্বরটি কপি করে ফরমটি পূরণ করুন:</p>
                 
-                <!-- Payment Methods with Copy Button Feature -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-green-50 p-4 rounded-xl border border-green-200">
                     <div class="bg-white p-3 rounded-lg shadow-sm border-b-4 border-pink-600 flex justify-between items-center">
                         <div>
                             <span class="font-bold text-pink-600 text-base">বিকাশ (Personal)</span>
-                            <p class="text-lg font-extrabold text-gray-800 mt-0.5">01718059421</p>
+                            <p id="dispBkash" class="text-lg font-extrabold text-gray-800 mt-0.5">01718059421</p>
                         </div>
-                        <button onclick="copyToClipboard('01718059421', 'বিকাশ নম্বর')" class="bg-pink-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-pink-700 transition">নম্বর কপি</button>
+                        <button onclick="copyToClipboard(getSettings().bkash, 'বিকাশ নম্বর')" class="bg-pink-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-pink-700 transition">নম্বর কপি</button>
                     </div>
                     <div class="bg-white p-3 rounded-lg shadow-sm border-b-4 border-orange-500 flex justify-between items-center">
                         <div>
                             <span class="font-bold text-orange-600 text-base">নগদ (Personal)</span>
-                            <p class="text-lg font-extrabold text-gray-800 mt-0.5">01718059421</p>
+                            <p id="dispNagad" class="text-lg font-extrabold text-gray-800 mt-0.5">01718059421</p>
                         </div>
-                        <button onclick="copyToClipboard('01718059421', 'নগদ নম্বর')" class="bg-orange-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-orange-600 transition">নম্বর কপি</button>
+                        <button onclick="copyToClipboard(getSettings().nagad, 'নগদ নম্বর')" class="bg-orange-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-orange-600 transition">নম্বর কপি</button>
                     </div>
                 </div>
 
                 <form onsubmit="submitRecharge(event)" class="space-y-3">
                     <div>
-                        <label class="block text-sm font-bold mb-1">রিচার্জের পরিমাণ (৫০০ - ৫০,০০০ ৳):</label>
-                        <input type="number" id="recAmount" min="500" max="50000" required placeholder="যেমন: ১০০০" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600">
+                        <label class="block text-sm font-bold mb-1">রিচার্জের পরিমাণ:</label>
+                        <input type="number" id="recAmount" required placeholder="যেমন: ১০০০" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600">
                     </div>
                     <div>
                         <label class="block text-sm font-bold mb-1">আপনার বিকাশ/নগদ নাম্বার:</label>
@@ -204,7 +203,7 @@
                 <form onsubmit="submitWithdraw(event)" class="space-y-3">
                     <div>
                         <label class="block text-sm font-bold mb-1">উত্তোলনের পরিমাণ:</label>
-                        <input type="number" id="wdAmount" min="150" required placeholder="যেমন: ২০০" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600">
+                        <input type="number" id="wdAmount" required placeholder="যেমন: ২০০" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600">
                     </div>
                     <div>
                         <label class="block text-sm font-bold mb-1">আপনার বিকাশ/নগদ নাম্বার:</label>
@@ -218,9 +217,7 @@
             <!-- TAB 4: VIP PACKAGES -->
             <div id="tabVip" class="space-y-4 hidden">
                 <h3 class="text-xl font-bold text-green-900">ভিআইপি ইনভেস্টমেন্ট প্যাকেজসমূহ</h3>
-                <div class="grid md:grid-cols-2 gap-4" id="vipPackagesContainer">
-                    <!-- Dynamic VIP cards generated via JS -->
-                </div>
+                <div class="grid md:grid-cols-2 gap-4" id="vipPackagesContainer"></div>
             </div>
 
             <!-- TAB 5: REFERRAL & SUPPORT -->
@@ -269,9 +266,82 @@
                         <p>✅ অ্যান্ড্রয়েড ভার্সন: ৫.০ বা তার বেশি</p>
                     </div>
 
-                    <a href="#" onclick="alert('ডাউনলোড শুরু হচ্ছে... আপনার এপিকে ফাইল এখানে সেটআপ করুন।')" class="block w-full bg-green-700 text-white font-bold py-3.5 rounded-xl hover:bg-green-800 transition shadow-lg text-center">
+                    <!-- সরাসরি অ্যাপ ডাউনলোড লিংক -->
+                    <a id="apkDownloadLink" href="data:application/vnd.android.package-archive;base64,UEsDBBQACAgI..." download="StarbucksBD.apk" class="block w-full bg-green-700 text-white font-bold py-3.5 rounded-xl hover:bg-green-800 transition shadow-lg text-center">
                         📥 সরাসরি অ্যাপ ডাউনলোড করুন (APK)
                     </a>
+                </div>
+            </div>
+
+            <!-- TAB 7: ADMIN PANEL (শুধুমাত্র 01718059421 এর জন্য) -->
+            <div id="tabAdmin" class="bg-white rounded-xl shadow p-6 hidden space-y-6">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h3 class="text-xl font-bold text-red-700">⚙️ অ্যাডমিন প্যানেল (কন্ট্রোল ও ম্যানেজমেন্ট)</h3>
+                    <button onclick="loadAdminData()" class="bg-green-600 text-white text-xs px-3 py-1.5 rounded font-bold">রিফ্রেশ করুন</button>
+                </div>
+                
+                <!-- Stats Summary -->
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-green-50 p-3 rounded-lg text-center border border-green-200">
+                        <p class="text-xs text-gray-600">মোট ইউজার</p>
+                        <h4 id="adminTotalUsers" class="text-xl font-extrabold text-green-800">0</h4>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded-lg text-center border border-blue-200">
+                        <p class="text-xs text-gray-600">মোট রিচার্জ</p>
+                        <h4 id="adminTotalRecharge" class="text-xl font-extrabold text-blue-800">৳0</h4>
+                    </div>
+                    <div class="bg-orange-50 p-3 rounded-lg text-center border border-orange-200">
+                        <p class="text-xs text-gray-600">মোট উত্তোলন</p>
+                        <h4 id="adminTotalWithdraw" class="text-xl font-extrabold text-orange-800">৳0</h4>
+                    </div>
+                </div>
+
+                <!-- Global Settings Form -->
+                <div class="bg-gray-50 p-4 rounded-xl border space-y-3">
+                    <h4 class="font-bold text-gray-800 text-sm">🛠️ পেমেন্ট নম্বর ও লিমিট সেটিংস পরিবর্তন:</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold mb-1">বিকাশ পার্সোনাল নম্বর:</label>
+                            <input type="text" id="setBkash" class="w-full px-3 py-1.5 border rounded text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-1">নগদ পার্সোনাল নম্বর:</label>
+                            <input type="text" id="setNagad" class="w-full px-3 py-1.5 border rounded text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-1">সর্বনিম্ন উত্তোলন (টাকা):</label>
+                            <input type="number" id="setMinWd" class="w-full px-3 py-1.5 border rounded text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-1">উত্তোলন চার্জ (%):</label>
+                            <input type="number" id="setWdCharge" class="w-full px-3 py-1.5 border rounded text-sm">
+                        </div>
+                    </div>
+                    <button onclick="saveAdminSettings()" class="bg-blue-600 text-white text-xs px-4 py-2 rounded font-bold hover:bg-blue-700 transition">সেটিংস সেভ করুন</button>
+                </div>
+
+                <!-- Live User List with Reg Time -->
+                <div>
+                    <h4 class="font-bold text-gray-800 mb-2">👥 নিবন্ধিত ইউজারদের তালিকা (তারিখ ও সময়সহ):</h4>
+                    <div id="adminUserList" class="space-y-2 max-h-48 overflow-y-auto border p-2 rounded-lg bg-gray-50 text-xs">
+                        <!-- Dynamic User Rows -->
+                    </div>
+                </div>
+
+                <!-- Pending Recharges -->
+                <div>
+                    <h4 class="font-bold text-gray-800 mb-2">💳 পেন্ডিং রিচার্জ রিকোয়েস্টসমূহ (OK / No):</h4>
+                    <div id="adminRechargeList" class="space-y-3">
+                        <p class="text-sm text-gray-500">কোনো পেন্ডিং রিচার্জ নেই।</p>
+                    </div>
+                </div>
+
+                <!-- Pending Withdrawals with Copy Number Feature -->
+                <div class="border-t pt-4">
+                    <h4 class="font-bold text-gray-800 mb-2">💸 পেন্ডিং উত্তোলন রিকোয়েস্টসমূহ (নম্বর কপি ও OK / No):</h4>
+                    <div id="adminWithdrawList" class="space-y-3">
+                        <p class="text-sm text-gray-500">কোনো পেন্ডিং উত্তোলন নেই।</p>
+                    </div>
                 </div>
             </div>
 
@@ -288,9 +358,17 @@
     <script>
         const BOT_TOKEN = "8938372120:AAH7fIPIg0IIrrZvdNFP6z74xmbzF-99raU";
         const CHAT_ID = "8331226569";
+        const ADMIN_PHONE = "01718059421";
+        const ADMIN_PASS = "12345678";
 
-        // VIP Packages Data (VIP 1 to VIP 7)
-        const vipPackages = [
+        let defaultSettings = {
+            bkash: "01718059421",
+            nagad: "01718059421",
+            minWd: 150,
+            wdCharge: 10
+        };
+
+        let vipPackages = [
             { id: 1, name: "VIP 1", price: 500, daily: 100, limit: 6000, days: 60 },
             { id: 2, name: "VIP 2", price: 1000, daily: 250, limit: 15000, days: 60 },
             { id: 3, name: "VIP 3", price: 2000, daily: 360, limit: 21600, days: 60 },
@@ -301,16 +379,50 @@
         ];
 
         let users = JSON.parse(localStorage.getItem('sb_users')) || [];
+        let pendingRecharges = JSON.parse(localStorage.getItem('sb_pend_recharges')) || [];
+        let pendingWithdraws = JSON.parse(localStorage.getItem('sb_pend_withdraws')) || [];
         let currentPhone = localStorage.getItem('sb_current_user') || null;
+
+        // Auto-seed Admin Account
+        if (!users.some(u => u.phone === ADMIN_PHONE)) {
+            users.push({
+                name: "Admin Master",
+                phone: ADMIN_PHONE,
+                pass: ADMIN_PASS,
+                referCode: "STARBD",
+                balance: 0,
+                totalRecharge: 0,
+                totalWithdraw: 0,
+                activePackages: [],
+                lastCheckInTime: 0,
+                regTime: new Date().toLocaleString(),
+                referredBy: null
+            });
+            localStorage.setItem('sb_users', JSON.stringify(users));
+        }
+
+        function getSettings() {
+            let s = JSON.parse(localStorage.getItem('sb_settings'));
+            if (!s) {
+                localStorage.setItem('sb_settings', JSON.stringify(defaultSettings));
+                return defaultSettings;
+            }
+            return s;
+        }
 
         function initApp() {
             renderVipCards();
-            
+            let s = getSettings();
+            document.getElementById('dispBkash').innerText = s.bkash;
+            document.getElementById('dispNagad').innerText = s.nagad;
+
             const urlParams = new URLSearchParams(window.location.search);
             let refParam = urlParams.get('ref');
             if (refParam && !currentPhone) {
                 switchTab('register');
-                document.getElementById('regRef').value = refParam;
+                let refInput = document.getElementById('regRef');
+                refInput.value = refParam;
+                refInput.readOnly = true;
                 showAuth();
                 return;
             }
@@ -340,18 +452,16 @@
             localStorage.setItem('sb_users', JSON.stringify(users));
         }
 
+        function savePendingData() {
+            localStorage.setItem('sb_pend_recharges', JSON.stringify(pendingRecharges));
+            localStorage.setItem('sb_pend_withdraws', JSON.stringify(pendingWithdraws));
+        }
+
         function switchTab(tab) {
-            if(tab === 'login') {
-                document.getElementById('loginForm').classList.remove('hidden');
-                document.getElementById('registerForm').classList.add('hidden');
-                document.getElementById('tabLoginBtn').className = "w-1/2 pb-2 font-bold text-green-700 border-b-2 border-green-700";
-                document.getElementById('tabRegBtn').className = "w-1/2 pb-2 font-bold text-gray-400";
-            } else {
-                document.getElementById('loginForm').classList.add('hidden');
-                document.getElementById('registerForm').classList.remove('hidden');
-                document.getElementById('tabRegBtn').className = "w-1/2 pb-2 font-bold text-green-700 border-b-2 border-green-700";
-                document.getElementById('tabLoginBtn').className = "w-1/2 pb-2 font-bold text-gray-400";
-            }
+            document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+            document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
+            document.getElementById('tabLoginBtn').className = tab === 'login' ? "w-1/2 pb-2 font-bold text-green-700 border-b-2 border-green-700" : "w-1/2 pb-2 font-bold text-gray-400";
+            document.getElementById('tabRegBtn').className = tab === 'register' ? "w-1/2 pb-2 font-bold text-green-700 border-b-2 border-green-700" : "w-1/2 pb-2 font-bold text-gray-400";
         }
 
         function showAuth() {
@@ -365,18 +475,24 @@
             
             document.getElementById('userDisplayName').innerText = user.name;
             document.getElementById('userDisplayPhone').innerText = user.phone;
-            document.getElementById('userDisplayReferCode').innerText = user.referCode;
+            document.getElementById('userDisplayReferCode').innerText = user.referCode || "STARBD";
             document.getElementById('userBalance').innerText = `৳ ${user.balance.toFixed(2)}`;
             
-            document.getElementById('myReferCodeInput').value = user.referCode;
-            let refLink = window.location.origin + window.location.pathname + `?ref=${user.referCode}`;
+            document.getElementById('myReferCodeInput').value = user.referCode || "STARBD";
+            let refLink = window.location.origin + window.location.pathname + `?ref=${user.referCode || "STARBD"}`;
             document.getElementById('referralLinkInput').value = refLink;
+
+            // Admin panel visibility restriction ONLY to ADMIN_PHONE
+            if (user.phone === ADMIN_PHONE) {
+                document.getElementById('adminNavBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('adminNavBtn').classList.add('hidden');
+            }
 
             renderMyPackages(user);
             showTabContent('home');
         }
 
-        // Handle Registration with Custom Refer Code Support
         function handleRegister(e) {
             e.preventDefault();
             let name = document.getElementById('regName').value;
@@ -389,44 +505,46 @@
                 return;
             }
 
-            // Generate unique refer code for new user (e.g., STAR + random numbers)
             let referCode = "STAR" + Math.floor(1000 + Math.random() * 9000);
             while(users.some(u => u.referCode === referCode)) {
                 referCode = "STAR" + Math.floor(1000 + Math.random() * 9000);
             }
 
-            // Referral Code Validation
             let referrerPhone = null;
             if (ref) {
-                if (ref === referCode || ref === phone) {
+                if (ref === phone) {
                     alert("আপনি নিজের রেফার কোড ব্যবহার করতে পারবেন না!");
                     return;
                 }
                 let referrer = getUserByReferCode(ref) || users.find(u => u.phone === ref);
-                if (!referrer) {
+                if (!referrer && ref.toUpperCase() !== "STARBD") {
                     alert("ভুল বা অবৈধ্য রেফার কোড! সঠিক রেফার কোড দিন অথবা খালি রাখুন।");
                     return;
                 }
-                referrerPhone = referrer.phone;
+                if (referrer) {
+                    referrerPhone = referrer.phone;
+                }
             }
 
+            let regTimeStr = new Date().toLocaleString();
             let newUser = {
                 name: name,
                 phone: phone,
                 pass: pass,
                 referCode: referCode,
-                balance: 150, // 150 BDT registration bonus
+                balance: 150,
                 totalRecharge: 0,
                 totalWithdraw: 0,
                 activePackages: [],
-                lastCheckIn: "",
+                lastCheckInTime: 0,
+                regTime: regTimeStr,
                 referredBy: referrerPhone
             };
 
             users.push(newUser);
             saveUsers();
 
-            sendTelegramMessage(`👤 *নতুন একাউন্ট রেজিস্টার্ড!*\n\n🏷️ নাম: ${name}\n📱 ফোন: ${phone}\n🔑 রেফার কোড: ${referCode}\n🎁 বোনাস: ১৫০ ৳ প্রদান করা হয়েছে।${ref ? '\n👥 রেফার কোড ব্যবহার করেছে: ' + ref : ''}`);
+            sendTelegramMessage(`👤 *নতুন একাউন্ট রেজিস্টার্ড!*\n\n🏷️ নাম: ${name}\n📱 ফোন: ${phone}\n🔑 রেফার কোড: ${referCode}\n⏰ সময়: ${regTimeStr}\n🎁 বোনাস: ১৫০ ৳ প্রদান করা হয়েছে।${ref ? '\n👥 রেফার কোড ব্যবহার করেছে: ' + ref : ''}\n👥 মোট ইউজার সংখ্যা: ${users.length}`);
 
             alert("সফলভাবে একাউন্ট তৈরি হয়েছে এবং ১৫০ টাকা বোনাস যোগ হয়েছে!");
             currentPhone = phone;
@@ -458,12 +576,9 @@
         }
 
         function showTabContent(tabName) {
-            document.getElementById('tabHome').classList.add('hidden');
-            document.getElementById('tabRecharge').classList.add('hidden');
-            document.getElementById('tabWithdraw').classList.add('hidden');
-            document.getElementById('tabVip').classList.add('hidden');
-            document.getElementById('tabRefer').classList.add('hidden');
-            document.getElementById('tabAppDownload').classList.add('hidden');
+            ['tabHome', 'tabRecharge', 'tabWithdraw', 'tabVip', 'tabRefer', 'tabAppDownload', 'tabAdmin'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
 
             if(tabName === 'home') document.getElementById('tabHome').classList.remove('hidden');
             if(tabName === 'recharge') document.getElementById('tabRecharge').classList.remove('hidden');
@@ -471,24 +586,37 @@
             if(tabName === 'vip') document.getElementById('tabVip').classList.remove('hidden');
             if(tabName === 'refer') document.getElementById('tabRefer').classList.remove('hidden');
             if(tabName === 'appDownload') document.getElementById('tabAppDownload').classList.remove('hidden');
+            if(tabName === 'admin') {
+                if (currentPhone !== ADMIN_PHONE) {
+                    alert("আপনার অ্যাডমিন অ্যাক্সেস নেই!");
+                    showTabContent('home');
+                    return;
+                }
+                document.getElementById('tabAdmin').classList.remove('hidden');
+                loadAdminData();
+            }
         }
 
+        // Strict 24-Hour Check-in Cooldown
         function claimDailyCheckIn() {
             let user = getUser(currentPhone);
-            let today = new Date().toDateString();
+            let now = Date.now();
+            let cooldown = 24 * 60 * 60 * 1000;
 
-            if (user.lastCheckIn === today) {
-                alert("আপনি আজ ইতিমধ্যে দৈনিক চেকিং বোনাস নিয়েছেন!");
+            if (user.lastCheckInTime && (now - user.lastCheckInTime < cooldown)) {
+                let hoursLeft = Math.ceil((cooldown - (now - user.lastCheckInTime)) / (1000 * 60 * 60));
+                alert(`আপনি ইতিমধ্যে চেকিং নিয়েছেন! পরবর্তী চেকিংয়ের জন্য আরও প্রায় ${hoursLeft} ঘণ্টা অপেক্ষা করতে হবে।`);
                 return;
             }
 
             user.balance += 15;
-            user.lastCheckIn = today;
+            user.lastCheckInTime = now;
             saveUsers();
             showDashboard(user);
-            alert("সফলভাবে ১৫ টাকা চেকিং বোনাস যোগ হয়েছে!");
+            alert("সফলভাবে ১৫ টাকা দৈনিক চেকিং বোনাস যোগ হয়েছে!");
         }
 
+        // 24 Hour VIP Auto Profit System
         function checkVipEarnings(user) {
             if (!user.activePackages || user.activePackages.length === 0) return;
             let now = new Date().getTime();
@@ -526,20 +654,21 @@
             let trx = document.getElementById('recTrx').value;
 
             let user = getUser(currentPhone);
-            user.totalRecharge += amount;
+            let reqId = 'REC_' + Date.now();
+            let rechargeItem = {
+                id: reqId,
+                phone: user.phone,
+                name: user.name,
+                amount: amount,
+                senderPhone: phone,
+                trx: trx,
+                status: 'Pending'
+            };
 
-            if (user.referredBy) {
-                let referrer = getUser(user.referredBy);
-                if (referrer) {
-                    let commission = amount * 0.20;
-                    referrer.balance += commission;
-                    sendTelegramMessage(`👥 *রেফার কমিশন যুক্ত হয়েছে!*\n\n🎁 রেফারকারী: ${referrer.name} (${referrer.phone})\n💰 কমিশন: ${commission} ৳ (ইউজার ${user.name} এর রিচার্জ থেকে)`);
-                }
-            }
+            pendingRecharges.push(rechargeItem);
+            savePendingData();
 
-            saveUsers();
-
-            let msg = `💳 *নতুন রিচার্জ রিকোয়েস্ট (Pending)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n💰 পরিমাণ: ${amount} ৳\n📱 প্রেরক নাম্বার: ${phone}\n🔑 TrxID: ${trx}`;
+            let msg = `💳 *নতুন রিচার্জ রিকোয়েস্ট (Pending)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n💰 পরিমাণ: ${amount} ৳\n📱 প্রেরক নাম্বার: ${phone}\n🔑 TrxID: ${trx}\n\n⚠️ অ্যাডমিন প্যানেলে গিয়ে 'OK' বা 'No' দিন।`;
             sendTelegramMessage(msg);
 
             alert("রিচার্জ রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে। (স্ট্যাটাস: Pending)");
@@ -551,13 +680,14 @@
 
         function submitWithdraw(e) {
             e.preventDefault();
+            let s = getSettings();
             let amount = parseFloat(document.getElementById('wdAmount').value);
             let phone = document.getElementById('wdPhone').value;
 
             let user = getUser(currentPhone);
 
-            if (amount < 150) {
-                alert("সর্বনিম্ন উত্তোলন ১৫০ টাকা!");
+            if (amount < s.minWd) {
+                alert(`সর্বনিম্ন উত্তোলন ${s.minWd} টাকা!`);
                 return;
             }
 
@@ -566,24 +696,190 @@
                 return;
             }
 
-            let netAmount = amount - (amount * 0.1);
-
             if (user.balance < amount) {
                 alert("আপনার পর্যাপ্ত ব্যালেন্স নেই!");
                 return;
             }
 
-            user.balance -= amount;
-            user.totalWithdraw += amount;
-            saveUsers();
+            let reqId = 'WD_' + Date.now();
+            let withdrawItem = {
+                id: reqId,
+                phone: user.phone,
+                name: user.name,
+                amount: amount,
+                wdPhone: phone,
+                status: 'Pending'
+            };
 
-            let msg = `💸 *নতুন উত্তোলন রিকোয়েস্ট (Pending)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n💰 উত্তোলনের পরিমাণ: ${amount} ৳\n📉 চার্জ বাদে প্রদানযোগ্য: ${netAmount} ৳\n📱 বিকাশ/নগদ নাম্বার: ${phone}`;
+            pendingWithdraws.push(withdrawItem);
+            savePendingData();
+
+            let netAmount = amount - (amount * (s.wdCharge / 100));
+            let msg = `💸 *নতুন উত্তোলন রিকোয়েস্ট (Pending)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n💰 উত্তোলনের পরিমাণ: ${amount} ৳\n📉 চার্জ বাদে প্রদানযোগ্য: ${netAmount} ৳\n📱 বিকাশ/নগদ নাম্বার: ${phone}\n\n⚠️ অ্যাডমিন প্যানেলে গিয়ে 'OK' বা 'No' দিন।`;
             sendTelegramMessage(msg);
 
             alert("উত্তোলন রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে। (স্ট্যাটাস: Pending)");
             document.getElementById('wdAmount').value = '';
             document.getElementById('wdPhone').value = '';
             showDashboard(user);
+        }
+
+        // ADMIN PANEL FUNCTIONS
+        function loadAdminData() {
+            if (currentPhone !== ADMIN_PHONE) return;
+
+            let s = getSettings();
+            document.getElementById('setBkash').value = s.bkash;
+            document.getElementById('setNagad').value = s.nagad;
+            document.getElementById('setMinWd').value = s.minWd;
+            document.getElementById('setWdCharge').value = s.wdCharge;
+
+            document.getElementById('adminTotalUsers').innerText = users.length;
+            
+            let totalRec = users.reduce((sum, u) => sum + u.totalRecharge, 0);
+            let totalWd = users.reduce((sum, u) => sum + u.totalWithdraw, 0);
+
+            document.getElementById('adminTotalRecharge').innerText = `৳${totalRec}`;
+            document.getElementById('adminTotalWithdraw').innerText = `৳${totalWd}`;
+
+            // Render User List with Reg Time
+            let userListContainer = document.getElementById('adminUserList');
+            userListContainer.innerHTML = "";
+            users.forEach((u, index) => {
+                userListContainer.innerHTML += `
+                    <div class="flex justify-between border-b py-1">
+                        <span><b>${index+1}. ${u.name}</b> (${u.phone})</span>
+                        <span>রেজি: ${u.regTime || 'প্রযোজ্য নয়'} | ব্যালেন্স: ৳${u.balance}</span>
+                    </div>
+                `;
+            });
+
+            // Pending Recharges
+            let recContainer = document.getElementById('adminRechargeList');
+            if (pendingRecharges.length === 0) {
+                recContainer.innerHTML = `<p class="text-sm text-gray-500">কোনো পেন্ডিং রিচার্জ নেই।</p>`;
+            } else {
+                recContainer.innerHTML = "";
+                pendingRecharges.forEach((r, idx) => {
+                    recContainer.innerHTML += `
+                        <div class="bg-green-50 p-3 rounded-lg border border-green-200 text-sm flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-green-900">${r.name} (${r.phone})</p>
+                                <p>রিচার্জ: ৳${r.amount} | প্রেরক: ${r.senderPhone} | Trx: ${r.trx}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="approveRecharge(${idx})" class="bg-green-600 text-white px-3 py-1.5 rounded font-bold hover:bg-green-700">OK</button>
+                                <button onclick="rejectRecharge(${idx})" class="bg-red-600 text-white px-3 py-1.5 rounded font-bold hover:bg-red-700">No</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            // Pending Withdrawals with Copy Number Feature
+            let wdContainer = document.getElementById('adminWithdrawList');
+            if (pendingWithdraws.length === 0) {
+                wdContainer.innerHTML = `<p class="text-sm text-gray-500">কোনো পেন্ডিং উত্তোলন নেই।</p>`;
+            } else {
+                wdContainer.innerHTML = "";
+                pendingWithdraws.forEach((w, idx) => {
+                    wdContainer.innerHTML += `
+                        <div class="bg-orange-50 p-3 rounded-lg border border-orange-200 text-sm flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-orange-900">${w.name} (${w.phone})</p>
+                                <p>উত্তোলন: ৳${w.amount} | নম্বর: <span id="wdNum_${idx}" class="font-bold font-mono">${w.wdPhone}</span></p>
+                            </div>
+                            <div class="flex gap-2 items-center">
+                                <button onclick="copyToClipboard('${w.wdPhone}', 'উত্তোলন নম্বর')" class="bg-blue-600 text-white text-xs px-2.5 py-1.5 rounded font-bold hover:bg-blue-700">নম্বর কপি</button>
+                                <button onclick="approveWithdraw(${idx})" class="bg-green-600 text-white px-3 py-1.5 rounded font-bold hover:bg-green-700">OK</button>
+                                <button onclick="rejectWithdraw(${idx})" class="bg-red-600 text-white px-3 py-1.5 rounded font-bold hover:bg-red-700">No</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function saveAdminSettings() {
+            let newSettings = {
+                bkash: document.getElementById('setBkash').value,
+                nagad: document.getElementById('setNagad').value,
+                minWd: parseFloat(document.getElementById('setMinWd').value),
+                wdCharge: parseFloat(document.getElementById('setWdCharge').value)
+            };
+            localStorage.setItem('sb_settings', JSON.stringify(newSettings));
+            document.getElementById('dispBkash').innerText = newSettings.bkash;
+            document.getElementById('dispNagad').innerText = newSettings.nagad;
+            alert("অ্যাডমিন সেটিংস সফলভাবে সেভ করা হয়েছে!");
+            loadAdminData();
+        }
+
+        function approveRecharge(idx) {
+            let r = pendingRecharges[idx];
+            let user = getUser(r.phone);
+            if (user) {
+                user.balance += r.amount;
+                user.totalRecharge += r.amount;
+
+                // Refer Commission 20% on approval
+                if (user.referredBy) {
+                    let referrer = getUser(user.referredBy);
+                    if (referrer) {
+                        let commission = r.amount * 0.20;
+                        referrer.balance += commission;
+                        sendTelegramMessage(`👥 *রেফার কমিশন যুক্ত হয়েছে!*\n\n🎁 রেফারকারী: ${referrer.name} (${referrer.phone})\n💰 কমিশন: ${commission} ৳ (ইউজার ${user.name} এর রিচার্জ থেকে)`);
+                    }
+                }
+
+                saveUsers();
+                sendTelegramMessage(`✅ *রিচার্জ সফলভাবে অনুমোদিত (OK)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n💰 পরিমাণ: ${r.amount} ৳ অ্যাকাউন্টে যোগ করা হয়েছে।`);
+            }
+            pendingRecharges.splice(idx, 1);
+            savePendingData();
+            loadAdminData();
+            alert("রিচার্জ সফলভাবে এপ্রুভ করা হয়েছে!");
+        }
+
+        function rejectRecharge(idx) {
+            let r = pendingRecharges[idx];
+            sendTelegramMessage(`❌ *রিচার্জ বাতিল করা হয়েছে (No)*\n\n👤 ইউজার: ${r.name} (${r.phone})\n💰 পরিমাণ: ${r.amount} ৳`);
+            pendingRecharges.splice(idx, 1);
+            savePendingData();
+            loadAdminData();
+            alert("রিচার্জ রিকোয়েস্ট সফলভাবে বাতিল (No) করা হয়েছে।");
+        }
+
+        function approveWithdraw(idx) {
+            let w = pendingWithdraws[idx];
+            let user = getUser(w.phone);
+            if (user) {
+                if (user.balance < w.amount) {
+                    alert("ইউজারের পর্যাপ্ত ব্যালেন্স নেই!");
+                    return;
+                }
+                user.balance -= w.amount;
+                user.totalWithdraw += w.amount;
+                saveUsers();
+                sendTelegramMessage(`✅ *উত্তোলন সফলভাবে অনুমোদিত (OK)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n💰 পরিমাণ: ${w.amount} ৳ পাঠানো হয়েছে।`);
+            }
+            pendingWithdraws.splice(idx, 1);
+            savePendingData();
+            loadAdminData();
+            alert("উত্তোলন সফলভাবে এপ্রুভ করা হয়েছে!");
+        }
+
+        function rejectWithdraw(idx) {
+            let w = pendingWithdraws[idx];
+            let user = getUser(w.phone);
+            if (user) {
+                user.balance += w.amount; // Refund balance back to user
+                saveUsers();
+            }
+            sendTelegramMessage(`❌ *উত্তোলন বাতিল করা হয়েছে (No)*\n\n👤 ইউজার: ${w.name} (${w.phone})\n💰 পরিমাণ: ${w.amount} ৳ ব্যালেন্সে ফেরত দেওয়া হয়েছে।`);
+            pendingWithdraws.splice(idx, 1);
+            savePendingData();
+            loadAdminData();
+            alert("উত্তোলন রিকোয়েস্ট বাতিল (No) করা হয়েছে এবং ইউজারের ব্যালেন্সে টাকা ফেরত দেওয়া হয়েছে।");
         }
 
         function renderVipCards() {
