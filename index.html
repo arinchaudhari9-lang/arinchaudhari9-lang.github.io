@@ -24,13 +24,13 @@
     <!-- Header Section -->
     <header class="bg-green-900 text-white shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">🌱 Starbucks BD</h1>
-            <nav class="space-x-3 text-sm md:text-base hidden md:block">
-                <a href="#" onclick="showTabContent('home')" class="hover:underline">হোম</a>
-                <a href="#" onclick="showTabContent('vip')" class="hover:underline">ভিআইপি প্যাকেজ</a>
-                <a href="#" onclick="showTabContent('refer')" class="hover:underline">রেফারেল</a>
-                <a href="#" onclick="showTabContent('appDownload')" class="hover:underline text-yellow-300 font-semibold">📲 অ্যাপস ডাউনলোড</a>
-                <a href="#" onclick="showTabContent('admin')" class="hover:underline text-red-300 font-semibold hidden" id="adminNavBtn">⚙️ অ্যাডমিন প্যানেল</a>
+            <h1 class="text-lg md:text-2xl font-bold flex items-center gap-2">🌱 Starbucks BD</h1>
+            <nav class="flex flex-wrap gap-2 text-xs md:text-base items-center">
+                <a href="#" onclick="showTabContent('home')" class="hover:underline px-1">হোম</a>
+                <a href="#" onclick="showTabContent('vip')" class="hover:underline px-1">ভিআইপি</a>
+                <a href="#" onclick="showTabContent('refer')" class="hover:underline px-1">রেফারেল</a>
+                <a href="#" onclick="showTabContent('appDownload')" class="hover:underline text-yellow-300 font-semibold px-1">📲 অ্যাপস</a>
+                <a href="#" onclick="showTabContent('admin')" class="bg-red-600 px-2 py-1 rounded text-white font-bold hidden" id="adminNavBtn">⚙️ অ্যাডমিন প্যানেল</a>
             </nav>
             <div id="authNavBtn"></div>
         </div>
@@ -106,7 +106,7 @@
             </div>
 
             <!-- Quick Action Buttons -->
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3" id="quickActionGrid">
                 <button onclick="showTabContent('recharge')" class="bg-white p-4 rounded-xl shadow font-bold text-green-800 hover:bg-green-50 transition flex flex-col items-center gap-1 border border-green-200">
                     <span class="text-2xl">💳</span> রিচার্জ
                 </button>
@@ -123,6 +123,9 @@
                     <span class="text-2xl">📲</span> অ্যাপস ডাউনলোড
                 </button>
             </div>
+
+            <!-- Admin Quick Button Container -->
+            <div id="adminQuickBtnContainer"></div>
 
             <!-- TAB 1: HOME / OVERVIEW -->
             <div id="tabHome" class="space-y-6">
@@ -195,12 +198,19 @@
                 </form>
             </div>
 
-            <!-- TAB 3: WITHDRAW -->
+            <!-- TAB 3: WITHDRAW (Updated with Method Selector & Immediate Balance Deduction) -->
             <div id="tabWithdraw" class="bg-white rounded-xl shadow p-6 hidden space-y-4">
                 <h3 class="text-xl font-bold text-green-900">টাকা উত্তোলন (Withdraw)</h3>
                 <p class="text-sm text-gray-600">সর্বনিম্ন উত্তোলন ১৫০ টাকা। (উত্তোলন চার্জ ১০%, রিচার্জ বাধ্যতামূলক)</p>
                 
                 <form onsubmit="submitWithdraw(event)" class="space-y-3">
+                    <div>
+                        <label class="block text-sm font-bold mb-1">উত্তোলনের মাধ্যম নির্বাচন করুন:</label>
+                        <select id="wdMethod" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600 font-semibold text-green-900 bg-white">
+                            <option value="বিকাশ">বিকাশ (Personal)</option>
+                            <option value="নগদ">নগদ (Personal)</option>
+                        </select>
+                    </div>
                     <div>
                         <label class="block text-sm font-bold mb-1">উত্তোলনের পরিমাণ:</label>
                         <input type="number" id="wdAmount" required placeholder="যেমন: ২০০" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600">
@@ -209,7 +219,7 @@
                         <label class="block text-sm font-bold mb-1">আপনার বিকাশ/নগদ নাম্বার:</label>
                         <input type="text" id="wdPhone" required placeholder="017xxxxxxxx" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600">
                     </div>
-                    <p class="text-xs text-red-600 font-semibold">* উত্তোলনের ওপর ১০% চার্জ প্রযোজ্য হবে।</p>
+                    <p class="text-xs text-red-600 font-semibold">* উত্তোলনের ওপর ১০% চার্জ প্রযোজ্য হবে এবং রিকোয়েস্ট পাঠানোর সাথে সাথেই ব্যালেন্স থেকে টাকা কেটে নেওয়া হবে।</p>
                     <button type="submit" class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-800 transition">উত্তোলন রিকোয়েস্ট পাঠান (Pending)</button>
                 </form>
             </div>
@@ -251,7 +261,7 @@
                 </div>
             </div>
 
-            <!-- TAB 6: APP DOWNLOAD -->
+            <!-- TAB 6: APP DOWNLOAD (Fixed to prevent parsing error) -->
             <div id="tabAppDownload" class="bg-white rounded-xl shadow p-6 hidden space-y-6 text-center">
                 <div class="max-w-md mx-auto space-y-4">
                     <div class="w-24 h-24 bg-green-100 rounded-3xl mx-auto flex items-center justify-center shadow-inner">
@@ -260,16 +270,16 @@
                     <h3 class="text-2xl font-bold text-green-900">Starbucks BD অফিসিয়াল অ্যাপ</h3>
                     <p class="text-sm text-gray-600">আমাদের অ্যান্ড্রয়েড অ্যাপ ইনস্টল করে আরও দ্রুত ও নিরাপদে অ্যাকাউন্ট পরিচালনা করুন।</p>
                     
-                    <div class="bg-green-50 p-4 rounded-xl border border-green-200 text-left text-xs space-y-1 text-gray-700 font-medium">
-                        <p>✅ ফাইলের নাম: StarbucksBD.apk</p>
-                        <p>✅ সাইজ: ১৫ মেগাবাইট (15 MB)</p>
-                        <p>✅ অ্যান্ড্রয়েড ভার্সন: ৫.০ বা তার বেশি</p>
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-200 text-left text-xs space-y-2 text-gray-700 font-medium">
+                        <p>✅ অ্যাপ ব্যবহার করার নিয়ম:</p>
+                        <p>১. আপনার ফোনের গুগল ক্রোম (Chrome) ব্রাউজারের ওপরের ডানপাশের তিন ডট মেনুতে ক্লিক করুন।</p>
+                        <p>২. সেখান থেকে <b>"Add to Home screen"</b> বা <b>"Install app"</b> অপশনে ক্লিক করুন।</p>
+                        <p>৩. ব্যাস! আপনার মোবাইলের স্ক্রিনে Starbucks BD অ্যাপের আইকন চলে আসবে এবং অ্যাপের মতো কাজ করবে।</p>
                     </div>
 
-                    <!-- সরাসরি অ্যাপ ডাউনলোড লিংক -->
-                    <a id="apkDownloadLink" href="data:application/vnd.android.package-archive;base64,UEsDBBQACAgI..." download="StarbucksBD.apk" class="block w-full bg-green-700 text-white font-bold py-3.5 rounded-xl hover:bg-green-800 transition shadow-lg text-center">
-                        📥 সরাসরি অ্যাপ ডাউনলোড করুন (APK)
-                    </a>
+                    <button onclick="alert('আপনার ব্রাউজারের Menu (৩ ডট) থেকে Add to Home Screen সিলেক্ট করে অ্যাপ ইনস্টল করে নিন।')" class="block w-full bg-green-700 text-white font-bold py-3.5 rounded-xl hover:bg-green-800 transition shadow-lg text-center">
+                        📥 হোম স্ক্রিনে অ্যাপ যুক্ত করুন (PWA)
+                    </button>
                 </div>
             </div>
 
@@ -336,9 +346,9 @@
                     </div>
                 </div>
 
-                <!-- Pending Withdrawals with Copy Number Feature -->
+                <!-- Pending Withdrawals with Charge details, Method & Copy Number Feature -->
                 <div class="border-t pt-4">
-                    <h4 class="font-bold text-gray-800 mb-2">💸 পেন্ডিং উত্তোলন রিকোয়েস্টসমূহ (নম্বর কপি ও OK / No):</h4>
+                    <h4 class="font-bold text-gray-800 mb-2">💸 পেন্ডিং উত্তোলন রিকোয়েস্টসমূহ (মাধ্যম, চার্জ ও নম্বর কপি):</h4>
                     <div id="adminWithdrawList" class="space-y-3">
                         <p class="text-sm text-gray-500">কোনো পেন্ডিং উত্তোলন নেই।</p>
                     </div>
@@ -482,11 +492,19 @@
             let refLink = window.location.origin + window.location.pathname + `?ref=${user.referCode || "STARBD"}`;
             document.getElementById('referralLinkInput').value = refLink;
 
-            // Admin panel visibility restriction ONLY to ADMIN_PHONE
+            let adminNav = document.getElementById('adminNavBtn');
+            let adminQuickBtn = document.getElementById('adminQuickBtnContainer');
+
             if (user.phone === ADMIN_PHONE) {
-                document.getElementById('adminNavBtn').classList.remove('hidden');
+                adminNav.classList.remove('hidden');
+                adminQuickBtn.innerHTML = `
+                    <button onclick="showTabContent('admin')" class="w-full bg-red-600 text-white p-4 rounded-xl shadow-lg font-bold hover:bg-red-700 transition flex items-center justify-center gap-2 border-2 border-white">
+                        <span class="text-2xl">⚙️</span> অ্যাডমিন প্যানেল ওপেন করুন (কন্ট্রোল ও ম্যানেজমেন্ট)
+                    </button>
+                `;
             } else {
-                document.getElementById('adminNavBtn').classList.add('hidden');
+                adminNav.classList.add('hidden');
+                adminQuickBtn.innerHTML = "";
             }
 
             renderMyPackages(user);
@@ -678,9 +696,11 @@
             showDashboard(user);
         }
 
+        // Updated Withdraw Submission with Immediate Deduction & Method
         function submitWithdraw(e) {
             e.preventDefault();
             let s = getSettings();
+            let method = document.getElementById('wdMethod').value;
             let amount = parseFloat(document.getElementById('wdAmount').value);
             let phone = document.getElementById('wdPhone').value;
 
@@ -701,12 +721,22 @@
                 return;
             }
 
+            // Immediately deduct balance from user account
+            user.balance -= amount;
+            saveUsers();
+
+            let charge = amount * (s.wdCharge / 100);
+            let netAmount = amount - charge;
+
             let reqId = 'WD_' + Date.now();
             let withdrawItem = {
                 id: reqId,
                 phone: user.phone,
                 name: user.name,
+                method: method,
                 amount: amount,
+                charge: charge,
+                netAmount: netAmount,
                 wdPhone: phone,
                 status: 'Pending'
             };
@@ -714,11 +744,10 @@
             pendingWithdraws.push(withdrawItem);
             savePendingData();
 
-            let netAmount = amount - (amount * (s.wdCharge / 100));
-            let msg = `💸 *নতুন উত্তোলন রিকোয়েস্ট (Pending)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n💰 উত্তোলনের পরিমাণ: ${amount} ৳\n📉 চার্জ বাদে প্রদানযোগ্য: ${netAmount} ৳\n📱 বিকাশ/নগদ নাম্বার: ${phone}\n\n⚠️ অ্যাডমিন প্যানেলে গিয়ে 'OK' বা 'No' দিন।`;
+            let msg = `💸 *নতুন উত্তোলন রিকোয়েস্ট (Pending)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n🏦 মাধ্যম: ${method}\n💰 উত্তোলনের পরিমাণ: ${amount} ৳\n📉 চার্জ (${s.wdCharge}%): ${charge} ৳\n💵 প্রদানযোগ্য: ${netAmount} ৳\n📱 নম্বর: ${phone}\n\n⚠️ অ্যাডমিন প্যানেলে গিয়ে চেক করে 'OK' বা 'No' দিন।`;
             sendTelegramMessage(msg);
 
-            alert("উত্তোলন রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে। (স্ট্যাটাস: Pending)");
+            alert("উত্তোলন রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে এবং ব্যালেন্স থেকে টাকা কেটে নেওয়া হয়েছে। (স্ট্যাটাস: Pending)");
             document.getElementById('wdAmount').value = '';
             document.getElementById('wdPhone').value = '';
             showDashboard(user);
@@ -742,7 +771,6 @@
             document.getElementById('adminTotalRecharge').innerText = `৳${totalRec}`;
             document.getElementById('adminTotalWithdraw').innerText = `৳${totalWd}`;
 
-            // Render User List with Reg Time
             let userListContainer = document.getElementById('adminUserList');
             userListContainer.innerHTML = "";
             users.forEach((u, index) => {
@@ -754,7 +782,6 @@
                 `;
             });
 
-            // Pending Recharges
             let recContainer = document.getElementById('adminRechargeList');
             if (pendingRecharges.length === 0) {
                 recContainer.innerHTML = `<p class="text-sm text-gray-500">কোনো পেন্ডিং রিচার্জ নেই।</p>`;
@@ -776,7 +803,7 @@
                 });
             }
 
-            // Pending Withdrawals with Copy Number Feature
+            // Pending Withdrawals displaying method, charge calculation, and copy button
             let wdContainer = document.getElementById('adminWithdrawList');
             if (pendingWithdraws.length === 0) {
                 wdContainer.innerHTML = `<p class="text-sm text-gray-500">কোনো পেন্ডিং উত্তোলন নেই।</p>`;
@@ -786,8 +813,9 @@
                     wdContainer.innerHTML += `
                         <div class="bg-orange-50 p-3 rounded-lg border border-orange-200 text-sm flex justify-between items-center">
                             <div>
-                                <p class="font-bold text-orange-900">${w.name} (${w.phone})</p>
-                                <p>উত্তোলন: ৳${w.amount} | নম্বর: <span id="wdNum_${idx}" class="font-bold font-mono">${w.wdPhone}</span></p>
+                                <p class="font-bold text-orange-900">${w.name} (${w.phone}) - [${w.method}]</p>
+                                <p>উত্তোলন: ৳${w.amount} | চার্জ: ৳${w.charge || (w.amount*0.1)} | প্রদানযোগ্য: <span class="font-bold text-green-700">৳${w.netAmount || (w.amount*0.9)}</span></p>
+                                <p>নম্বর: <span class="font-bold font-mono">${w.wdPhone}</span></p>
                             </div>
                             <div class="flex gap-2 items-center">
                                 <button onclick="copyToClipboard('${w.wdPhone}', 'উত্তোলন নম্বর')" class="bg-blue-600 text-white text-xs px-2.5 py-1.5 rounded font-bold hover:bg-blue-700">নম্বর কপি</button>
@@ -821,7 +849,6 @@
                 user.balance += r.amount;
                 user.totalRecharge += r.amount;
 
-                // Refer Commission 20% on approval
                 if (user.referredBy) {
                     let referrer = getUser(user.referredBy);
                     if (referrer) {
@@ -853,14 +880,9 @@
             let w = pendingWithdraws[idx];
             let user = getUser(w.phone);
             if (user) {
-                if (user.balance < w.amount) {
-                    alert("ইউজারের পর্যাপ্ত ব্যালেন্স নেই!");
-                    return;
-                }
-                user.balance -= w.amount;
                 user.totalWithdraw += w.amount;
                 saveUsers();
-                sendTelegramMessage(`✅ *উত্তোলন সফলভাবে অনুমোদিত (OK)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n💰 পরিমাণ: ${w.amount} ৳ পাঠানো হয়েছে।`);
+                sendTelegramMessage(`✅ *উত্তোলন সফলভাবে অনুমোদিত (OK)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n🏦 মাধ্যম: ${w.method}\n💰 পরিমাণ: ${w.amount} ৳ (প্রদানযোগ্য: ${w.netAmount} ৳) পাঠানো হয়েছে।`);
             }
             pendingWithdraws.splice(idx, 1);
             savePendingData();
@@ -868,14 +890,15 @@
             alert("উত্তোলন সফলভাবে এপ্রুভ করা হয়েছে!");
         }
 
+        // Updated Reject Withdrawal to Refund Deducted Balance Back to User
         function rejectWithdraw(idx) {
             let w = pendingWithdraws[idx];
             let user = getUser(w.phone);
             if (user) {
-                user.balance += w.amount; // Refund balance back to user
+                user.balance += w.amount; // Refund the deducted amount back
                 saveUsers();
             }
-            sendTelegramMessage(`❌ *উত্তোলন বাতিল করা হয়েছে (No)*\n\n👤 ইউজার: ${w.name} (${w.phone})\n💰 পরিমাণ: ${w.amount} ৳ ব্যালেন্সে ফেরত দেওয়া হয়েছে।`);
+            sendTelegramMessage(`❌ *উত্তোলন বাতিল করা হয়েছে (No)*\n\n👤 ইউজার: ${w.name} (${w.phone})\n💰 পরিমাণ: ${w.amount} ৳ ইউজারের ব্যালেন্সে ফেরত দেওয়া হয়েছে।`);
             pendingWithdraws.splice(idx, 1);
             savePendingData();
             loadAdminData();
