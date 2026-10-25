@@ -29,6 +29,7 @@
                 <a href="#" onclick="showTabContent('home')" class="hover:underline px-1">হোম</a>
                 <a href="#" onclick="showTabContent('vip')" class="hover:underline px-1">ভিআইপি</a>
                 <a href="#" onclick="showTabContent('refer')" class="hover:underline px-1">রেফারেল</a>
+                <a href="#" onclick="showTabContent('smsInbox')" class="hover:underline text-green-300 font-semibold px-1">📩 ইনবক্স <span id="smsBadge" class="bg-red-500 text-white text-xs px-1.5 py-0.2 rounded-full">0</span></a>
                 <a href="#" onclick="showTabContent('appDownload')" class="hover:underline text-yellow-300 font-semibold px-1">📲 অ্যাপস</a>
                 <a href="#" onclick="showTabContent('admin')" class="bg-red-600 px-2 py-1 rounded text-white font-bold hidden" id="adminNavBtn">⚙️ অ্যাডমিন প্যানেল</a>
             </nav>
@@ -100,7 +101,7 @@
                         <p class="text-xs opacity-85">মূল ব্যালেন্স</p>
                         <h2 class="text-2xl md:text-3xl font-extrabold" id="userBalance">৳ ০.০০</h2>
                     </div>
-                    <!-- দৈনিক চেকিং বাটন (সবুজ রঙের) -->
+                    <!-- দৈনিক চেকিং বাটন -->
                     <button onclick="claimDailyCheckIn()" id="checkInBtn" class="font-bold px-4 py-2 rounded-xl text-sm shadow transition">🎁 দৈনিক চেকিং (৳১৫)</button>
                 </div>
             </div>
@@ -183,6 +184,13 @@
 
                 <form onsubmit="submitRecharge(event)" class="space-y-3">
                     <div>
+                        <label class="block text-sm font-bold mb-1">টাকা পাঠানোর মাধ্যম সিলেক্ট করুন:</label>
+                        <select id="recMethod" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600 font-semibold text-green-900 bg-white">
+                            <option value="বিকাশ">বিকাশ (bKash)</option>
+                            <option value="নগদ">নগদ (Nagad)</option>
+                        </select>
+                    </div>
+                    <div>
                         <label class="block text-sm font-bold mb-1">রিচার্জের পরিমাণ:</label>
                         <input type="number" id="recAmount" required placeholder="যেমন: ১০০০" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600">
                     </div>
@@ -198,7 +206,7 @@
                 </form>
             </div>
 
-            <!-- TAB 3: WITHDRAW (Updated with Method Selector & Immediate Balance Deduction) -->
+            <!-- TAB 3: WITHDRAW -->
             <div id="tabWithdraw" class="bg-white rounded-xl shadow p-6 hidden space-y-4">
                 <h3 class="text-xl font-bold text-green-900">টাকা উত্তোলন (Withdraw)</h3>
                 <p class="text-sm text-gray-600">সর্বনিম্ন উত্তোলন ১৫০ টাকা। (উত্তোলন চার্জ ১০%, রিচার্জ বাধ্যতামূলক)</p>
@@ -224,13 +232,25 @@
                 </form>
             </div>
 
-            <!-- TAB 4: VIP PACKAGES -->
+            <!-- TAB 4: SMS INBOX -->
+            <div id="tabSmsInbox" class="bg-white rounded-xl shadow p-6 hidden space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h3 class="text-xl font-bold text-green-900">📩 অফিশিয়াল এসএমএস ইনবক্স (01718059421)</h3>
+                    <button onclick="renderSmsInbox()" class="bg-green-600 text-white text-xs px-3 py-1.5 rounded font-bold">রিফ্রেশ</button>
+                </div>
+                <p class="text-xs text-gray-600">আপনার একাউন্ট সম্পর্কিত সমস্ত অফিশিয়াল এসএমএস নোটিফিকেশন এখানে সংরক্ষিত থাকে:</p>
+                <div id="userSmsList" class="space-y-3">
+                    <p class="text-sm text-gray-500">কোনো এসএমএস নেই।</p>
+                </div>
+            </div>
+
+            <!-- TAB 5: VIP PACKAGES -->
             <div id="tabVip" class="space-y-4 hidden">
                 <h3 class="text-xl font-bold text-green-900">ভিআইপি ইনভেস্টমেন্ট প্যাকেজসমূহ</h3>
                 <div class="grid md:grid-cols-2 gap-4" id="vipPackagesContainer"></div>
             </div>
 
-            <!-- TAB 5: REFERRAL & SUPPORT -->
+            <!-- TAB 6: REFERRAL & SUPPORT -->
             <div id="tabRefer" class="bg-white rounded-xl shadow p-6 hidden space-y-6">
                 <div>
                     <h3 class="text-xl font-bold text-green-900 mb-2">👥 রেফার করুন এবং ২০% কমিশন নিন</h3>
@@ -261,7 +281,7 @@
                 </div>
             </div>
 
-            <!-- TAB 6: APP DOWNLOAD (Fixed to prevent parsing error) -->
+            <!-- TAB 7: APP DOWNLOAD -->
             <div id="tabAppDownload" class="bg-white rounded-xl shadow p-6 hidden space-y-6 text-center">
                 <div class="max-w-md mx-auto space-y-4">
                     <div class="w-24 h-24 bg-green-100 rounded-3xl mx-auto flex items-center justify-center shadow-inner">
@@ -270,20 +290,19 @@
                     <h3 class="text-2xl font-bold text-green-900">Starbucks BD অফিসিয়াল অ্যাপ</h3>
                     <p class="text-sm text-gray-600">আমাদের অ্যান্ড্রয়েড অ্যাপ ইনস্টল করে আরও দ্রুত ও নিরাপদে অ্যাকাউন্ট পরিচালনা করুন।</p>
                     
-                    <div class="bg-green-50 p-4 rounded-xl border border-green-200 text-left text-xs space-y-2 text-gray-700 font-medium">
-                        <p>✅ অ্যাপ ব্যবহার করার নিয়ম:</p>
-                        <p>১. আপনার ফোনের গুগল ক্রোম (Chrome) ব্রাউজারের ওপরের ডানপাশের তিন ডট মেনুতে ক্লিক করুন।</p>
-                        <p>২. সেখান থেকে <b>"Add to Home screen"</b> বা <b>"Install app"</b> অপশনে ক্লিক করুন।</p>
-                        <p>৩. ব্যাস! আপনার মোবাইলের স্ক্রিনে Starbucks BD অ্যাপের আইকন চলে আসবে এবং অ্যাপের মতো কাজ করবে।</p>
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-200 text-left text-xs space-y-1 text-gray-700 font-medium">
+                        <p>✅ ফাইলের নাম: StarbucksBD.apk</p>
+                        <p>✅ সাইজ: ১৫ মেগাবাইট (15 MB)</p>
+                        <p>✅ অ্যান্ড্রয়েড ভার্সন: ৫.০ বা তার বেশি</p>
                     </div>
 
-                    <button onclick="alert('আপনার ব্রাউজারের Menu (৩ ডট) থেকে Add to Home Screen সিলেক্ট করে অ্যাপ ইনস্টল করে নিন।')" class="block w-full bg-green-700 text-white font-bold py-3.5 rounded-xl hover:bg-green-800 transition shadow-lg text-center">
-                        📥 হোম স্ক্রিনে অ্যাপ যুক্ত করুন (PWA)
-                    </button>
+                    <a href="StarbucksBD.apk" download="StarbucksBD.apk" class="block w-full bg-green-700 text-white font-bold py-3.5 rounded-xl hover:bg-green-800 transition shadow-lg text-center">
+                        📥 সরাসরি অ্যাপ ডাউনলোড করুন (APK)
+                    </a>
                 </div>
             </div>
 
-            <!-- TAB 7: ADMIN PANEL (শুধুমাত্র 01718059421 এর জন্য) -->
+            <!-- TAB 8: ADMIN PANEL -->
             <div id="tabAdmin" class="bg-white rounded-xl shadow p-6 hidden space-y-6">
                 <div class="flex justify-between items-center border-b pb-3">
                     <h3 class="text-xl font-bold text-red-700">⚙️ অ্যাডমিন প্যানেল (কন্ট্রোল ও ম্যানেজমেন্ট)</h3>
@@ -340,13 +359,13 @@
 
                 <!-- Pending Recharges -->
                 <div>
-                    <h4 class="font-bold text-gray-800 mb-2">💳 পেন্ডিং রিচার্জ রিকোয়েস্টসমূহ (OK / No):</h4>
+                    <h4 class="font-bold text-gray-800 mb-2">💳 পেন্ডিং রিচার্জ রিকোয়েস্টসমূহ (মাধ্যমসহ OK / No):</h4>
                     <div id="adminRechargeList" class="space-y-3">
                         <p class="text-sm text-gray-500">কোনো পেন্ডিং রিচার্জ নেই।</p>
                     </div>
                 </div>
 
-                <!-- Pending Withdrawals with Charge details, Method & Copy Number Feature -->
+                <!-- Pending Withdrawals -->
                 <div class="border-t pt-4">
                     <h4 class="font-bold text-gray-800 mb-2">💸 পেন্ডিং উত্তোলন রিকোয়েস্টসমূহ (মাধ্যম, চার্জ ও নম্বর কপি):</h4>
                     <div id="adminWithdrawList" class="space-y-3">
@@ -391,6 +410,7 @@
         let users = JSON.parse(localStorage.getItem('sb_users')) || [];
         let pendingRecharges = JSON.parse(localStorage.getItem('sb_pend_recharges')) || [];
         let pendingWithdraws = JSON.parse(localStorage.getItem('sb_pend_withdraws')) || [];
+        let smsInbox = JSON.parse(localStorage.getItem('sb_sms_inbox')) || {};
         let currentPhone = localStorage.getItem('sb_current_user') || null;
 
         // Auto-seed Admin Account
@@ -418,6 +438,44 @@
                 return defaultSettings;
             }
             return s;
+        }
+
+        function sendSmsToUser(phone, text) {
+            if (!smsInbox[phone]) smsInbox[phone] = [];
+            smsInbox[phone].unshift({
+                time: new Date().toLocaleString(),
+                sender: ADMIN_PHONE,
+                text: text
+            });
+            localStorage.setItem('sb_sms_inbox', JSON.stringify(smsInbox));
+            updateSmsBadge();
+        }
+
+        function updateSmsBadge() {
+            if (!currentPhone) return;
+            let inbox = smsInbox[currentPhone] || [];
+            document.getElementById('smsBadge').innerText = inbox.length;
+        }
+
+        function renderSmsInbox() {
+            let list = document.getElementById('userSmsList');
+            let inbox = (currentPhone && smsInbox[currentPhone]) ? smsInbox[currentPhone] : [];
+            if (inbox.length === 0) {
+                list.innerHTML = `<p class="text-sm text-gray-500">কোনো এসএমএস নেই।</p>`;
+                return;
+            }
+            list.innerHTML = "";
+            inbox.forEach(sms => {
+                list.innerHTML += `
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-200 text-xs space-y-1">
+                        <div class="flex justify-between font-bold text-green-900">
+                            <span>প্রেরক: ${sms.sender}</span>
+                            <span class="text-gray-500">${sms.time}</span>
+                        </div>
+                        <p class="text-gray-800 font-medium text-sm mt-1">${sms.text}</p>
+                    </div>
+                `;
+            });
         }
 
         function initApp() {
@@ -507,6 +565,7 @@
                 adminQuickBtn.innerHTML = "";
             }
 
+            updateSmsBadge();
             renderMyPackages(user);
             showTabContent('home');
         }
@@ -564,6 +623,11 @@
 
             sendTelegramMessage(`👤 *নতুন একাউন্ট রেজিস্টার্ড!*\n\n🏷️ নাম: ${name}\n📱 ফোন: ${phone}\n🔑 রেফার কোড: ${referCode}\n⏰ সময়: ${regTimeStr}\n🎁 বোনাস: ১৫০ ৳ প্রদান করা হয়েছে।${ref ? '\n👥 রেফার কোড ব্যবহার করেছে: ' + ref : ''}\n👥 মোট ইউজার সংখ্যা: ${users.length}`);
 
+            let smsText = `আসসালামু আলাইকুম ${name} স্যার, আপনার একাউন্টটি সফলভাবে রেজিস্ট্রেশন সম্পন্ন হয়েছে তাই বসে না থেকে এখনই আপনারা কাজ শুরু করে দিন। আমরা বিশ্বাসের সাথে কাজ করতেছি এবং করবো আপনারা পাশে থাকবেন ধন্যবাদ`;
+            sendSmsToUser(phone, smsText);
+
+            alert(`📩 [অফিসিয়াল SMS (${ADMIN_PHONE}) থেকে আপনার নম্বরে (${phone}) পাঠানো হয়েছে]:\n\n${smsText}`);
+
             alert("সফলভাবে একাউন্ট তৈরি হয়েছে এবং ১৫০ টাকা বোনাস যোগ হয়েছে!");
             currentPhone = phone;
             localStorage.setItem('sb_current_user', phone);
@@ -594,13 +658,17 @@
         }
 
         function showTabContent(tabName) {
-            ['tabHome', 'tabRecharge', 'tabWithdraw', 'tabVip', 'tabRefer', 'tabAppDownload', 'tabAdmin'].forEach(id => {
+            ['tabHome', 'tabRecharge', 'tabWithdraw', 'tabSmsInbox', 'tabVip', 'tabRefer', 'tabAppDownload', 'tabAdmin'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
 
             if(tabName === 'home') document.getElementById('tabHome').classList.remove('hidden');
             if(tabName === 'recharge') document.getElementById('tabRecharge').classList.remove('hidden');
             if(tabName === 'withdraw') document.getElementById('tabWithdraw').classList.remove('hidden');
+            if(tabName === 'smsInbox') {
+                document.getElementById('tabSmsInbox').classList.remove('hidden');
+                renderSmsInbox();
+            }
             if(tabName === 'vip') document.getElementById('tabVip').classList.remove('hidden');
             if(tabName === 'refer') document.getElementById('tabRefer').classList.remove('hidden');
             if(tabName === 'appDownload') document.getElementById('tabAppDownload').classList.remove('hidden');
@@ -615,7 +683,6 @@
             }
         }
 
-        // Strict 24-Hour Check-in Cooldown
         function claimDailyCheckIn() {
             let user = getUser(currentPhone);
             let now = Date.now();
@@ -634,7 +701,6 @@
             alert("সফলভাবে ১৫ টাকা দৈনিক চেকিং বোনাস যোগ হয়েছে!");
         }
 
-        // 24 Hour VIP Auto Profit System
         function checkVipEarnings(user) {
             if (!user.activePackages || user.activePackages.length === 0) return;
             let now = new Date().getTime();
@@ -667,6 +733,7 @@
 
         function submitRecharge(e) {
             e.preventDefault();
+            let method = document.getElementById('recMethod').value;
             let amount = parseFloat(document.getElementById('recAmount').value);
             let phone = document.getElementById('recPhone').value;
             let trx = document.getElementById('recTrx').value;
@@ -677,6 +744,7 @@
                 id: reqId,
                 phone: user.phone,
                 name: user.name,
+                method: method,
                 amount: amount,
                 senderPhone: phone,
                 trx: trx,
@@ -686,8 +754,13 @@
             pendingRecharges.push(rechargeItem);
             savePendingData();
 
-            let msg = `💳 *নতুন রিচার্জ রিকোয়েস্ট (Pending)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n💰 পরিমাণ: ${amount} ৳\n📱 প্রেরক নাম্বার: ${phone}\n🔑 TrxID: ${trx}\n\n⚠️ অ্যাডমিন প্যানেলে গিয়ে 'OK' বা 'No' দিন।`;
+            let msg = `💳 *নতুন রিচার্জ রিকোয়েস্ট (Pending)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n🏦 মাধ্যম: ${method}\n💰 পরিমাণ: ${amount} ৳\n📱 প্রেরক নাম্বার: ${phone}\n🔑 TrxID: ${trx}\n\n⚠️ অ্যাডমিন প্যানেলে গিয়ে 'OK' বা 'No' দিন।`;
             sendTelegramMessage(msg);
+
+            let smsText = `আসসালামু আলাইকুম স্যার আপনার রিচার্জ সম্পন্ন হয়েছে দয়া করে একটু অপেক্ষা করুন আমরা চেকিং করে সবকিছু ঠিক থাকলে ইনশাআল্লাহ ২ মিনিটের ভিতরে একাউন্টে টাকা যুক্ত হয়ে যাবে ধন্যবাদ`;
+            sendSmsToUser(user.phone, smsText);
+
+            alert(`📩 [অফিসিয়াল SMS (${ADMIN_PHONE}) থেকে আপনার নম্বরে পাঠানো হয়েছে]:\n\n${smsText}`);
 
             alert("রিচার্জ রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে। (স্ট্যাটাস: Pending)");
             document.getElementById('recAmount').value = '';
@@ -696,7 +769,6 @@
             showDashboard(user);
         }
 
-        // Updated Withdraw Submission with Immediate Deduction & Method
         function submitWithdraw(e) {
             e.preventDefault();
             let s = getSettings();
@@ -721,7 +793,6 @@
                 return;
             }
 
-            // Immediately deduct balance from user account
             user.balance -= amount;
             saveUsers();
 
@@ -747,13 +818,17 @@
             let msg = `💸 *নতুন উত্তোলন রিকোয়েস্ট (Pending)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n🏦 মাধ্যম: ${method}\n💰 উত্তোলনের পরিমাণ: ${amount} ৳\n📉 চার্জ (${s.wdCharge}%): ${charge} ৳\n💵 প্রদানযোগ্য: ${netAmount} ৳\n📱 নম্বর: ${phone}\n\n⚠️ অ্যাডমিন প্যানেলে গিয়ে চেক করে 'OK' বা 'No' দিন।`;
             sendTelegramMessage(msg);
 
+            let smsText = `আসসালামু আলাইকুম আপনার উত্তোলন সফল হয়েছে দয়া করে একটু অপেক্ষা করুন দুই থেকে এক মিনিটের ভিতরেই পেমেন্ট পেয়ে যাবেন ধন্যবাদ`;
+            sendSmsToUser(user.phone, smsText);
+
+            alert(`📩 [অফিসিয়াল SMS (${ADMIN_PHONE}) থেকে আপনার নম্বরে পাঠানো হয়েছে]:\n\n${smsText}`);
+
             alert("উত্তোলন রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে এবং ব্যালেন্স থেকে টাকা কেটে নেওয়া হয়েছে। (স্ট্যাটাস: Pending)");
             document.getElementById('wdAmount').value = '';
             document.getElementById('wdPhone').value = '';
             showDashboard(user);
         }
 
-        // ADMIN PANEL FUNCTIONS
         function loadAdminData() {
             if (currentPhone !== ADMIN_PHONE) return;
 
@@ -791,7 +866,7 @@
                     recContainer.innerHTML += `
                         <div class="bg-green-50 p-3 rounded-lg border border-green-200 text-sm flex justify-between items-center">
                             <div>
-                                <p class="font-bold text-green-900">${r.name} (${r.phone})</p>
+                                <p class="font-bold text-green-900">${r.name} (${r.phone}) - [মাধ্যম: <span class="text-pink-600 font-bold">${r.method || 'বিকাশ'}</span>]</p>
                                 <p>রিচার্জ: ৳${r.amount} | প্রেরক: ${r.senderPhone} | Trx: ${r.trx}</p>
                             </div>
                             <div class="flex gap-2">
@@ -803,7 +878,6 @@
                 });
             }
 
-            // Pending Withdrawals displaying method, charge calculation, and copy button
             let wdContainer = document.getElementById('adminWithdrawList');
             if (pendingWithdraws.length === 0) {
                 wdContainer.innerHTML = `<p class="text-sm text-gray-500">কোনো পেন্ডিং উত্তোলন নেই।</p>`;
@@ -859,7 +933,7 @@
                 }
 
                 saveUsers();
-                sendTelegramMessage(`✅ *রিচার্জ সফলভাবে অনুমোদিত (OK)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n💰 পরিমাণ: ${r.amount} ৳ অ্যাকাউন্টে যোগ করা হয়েছে।`);
+                sendTelegramMessage(`✅ *রিচার্জ সফলভাবে অনুমোদিত (OK)*\n\n👤 ইউজার: ${user.name} (${user.phone})\n🏦 মাধ্যম: ${r.method}\n💰 পরিমাণ: ${r.amount} ৳ অ্যাকাউন্টে যোগ করা হয়েছে।`);
             }
             pendingRecharges.splice(idx, 1);
             savePendingData();
@@ -890,12 +964,11 @@
             alert("উত্তোলন সফলভাবে এপ্রুভ করা হয়েছে!");
         }
 
-        // Updated Reject Withdrawal to Refund Deducted Balance Back to User
         function rejectWithdraw(idx) {
             let w = pendingWithdraws[idx];
             let user = getUser(w.phone);
             if (user) {
-                user.balance += w.amount; // Refund the deducted amount back
+                user.balance += w.amount;
                 saveUsers();
             }
             sendTelegramMessage(`❌ *উত্তোলন বাতিল করা হয়েছে (No)*\n\n👤 ইউজার: ${w.name} (${w.phone})\n💰 পরিমাণ: ${w.amount} ৳ ইউজারের ব্যালেন্সে ফেরত দেওয়া হয়েছে।`);
