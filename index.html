@@ -21,7 +21,7 @@
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col justify-between">
 
-    <!-- Header Section -->
+    <!-- Header Section (App Download Removed) -->
     <header class="bg-green-900 text-white shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <h1 class="text-lg md:text-2xl font-bold flex items-center gap-2">🌱 Starbucks BD</h1>
@@ -30,7 +30,6 @@
                 <a href="#" onclick="showTabContent('vip')" class="hover:underline px-1">ভিআইপি</a>
                 <a href="#" onclick="showTabContent('refer')" class="hover:underline px-1">রেফারেল</a>
                 <a href="#" onclick="showTabContent('smsInbox')" class="hover:underline text-green-300 font-semibold px-1">📩 ইনবক্স <span id="smsBadge" class="bg-red-500 text-white text-xs px-1.5 py-0.2 rounded-full">0</span></a>
-                <a href="#" onclick="showTabContent('appDownload')" class="hover:underline text-yellow-300 font-semibold px-1">📲 অ্যাপস</a>
                 <a href="#" onclick="showTabContent('admin')" class="bg-red-600 px-2 py-1 rounded text-white font-bold hidden" id="adminNavBtn">⚙️ অ্যাডমিন প্যানেল</a>
             </nav>
             <div id="authNavBtn"></div>
@@ -106,8 +105,8 @@
                 </div>
             </div>
 
-            <!-- Quick Action Buttons -->
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-3" id="quickActionGrid">
+            <!-- Quick Action Buttons (4 Buttons) -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="quickActionGrid">
                 <button onclick="showTabContent('recharge')" class="bg-white p-4 rounded-xl shadow font-bold text-green-800 hover:bg-green-50 transition flex flex-col items-center gap-1 border border-green-200">
                     <span class="text-2xl">💳</span> রিচার্জ
                 </button>
@@ -119,9 +118,6 @@
                 </button>
                 <button onclick="showTabContent('refer')" class="bg-white p-4 rounded-xl shadow font-bold text-green-800 hover:bg-green-50 transition flex flex-col items-center gap-1 border border-green-200">
                     <span class="text-2xl">👥</span> রেফারেল
-                </button>
-                <button onclick="showTabContent('appDownload')" class="bg-gradient-to-r from-emerald-600 to-green-700 text-white p-4 rounded-xl shadow font-bold hover:opacity-90 transition flex flex-col items-center gap-1 col-span-2 md:col-span-1">
-                    <span class="text-2xl">📲</span> অ্যাপস ডাউনলোড
                 </button>
             </div>
 
@@ -142,13 +138,37 @@
                     </ul>
                 </div>
 
-                <!-- App Download Banner -->
-                <div class="bg-gradient-to-r from-green-900 to-emerald-800 text-white p-6 rounded-2xl shadow flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div>
-                        <h3 class="text-xl font-bold mb-1">📲 Starbucks BD অ্যান্ড্রয়েড অ্যাপ</h3>
-                        <p class="text-sm text-green-200">মোবাইল থেকে খুব সহজে ভিআইপি প্যাকেজ ও ট্রানজেকশন করতে অ্যাপ ইনস্টল করুন।</p>
+                <!-- 3 Generation Referral Stats & VIP Dashboard -->
+                <div class="bg-white rounded-xl shadow p-5 space-y-3">
+                    <h3 class="font-bold text-green-900 text-base border-b pb-2">📊 ভিআইপি ও ৩ জেনারেশন রেফারেল ড্যাশবোর্ড</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="bg-green-50 p-3 rounded-lg border border-green-200">
+                            <p class="text-xs text-gray-600">লেভেল ১ রেফার (২০%):</p>
+                            <h4 id="dashLvl1" class="text-lg font-bold text-green-800">০ জন</h4>
+                        </div>
+                        <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-200">
+                            <p class="text-xs text-gray-600">লেভেল ২ রেফার (২%):</p>
+                            <h4 id="dashLvl2" class="text-lg font-bold text-emerald-800">০ জন</h4>
+                        </div>
+                        <div class="bg-teal-50 p-3 rounded-lg border border-teal-200">
+                            <p class="text-xs text-gray-600">লেভেল ৩ রেফার (১%):</p>
+                            <h4 id="dashLvl3" class="text-lg font-bold text-teal-800">০ জন</h4>
+                        </div>
                     </div>
-                    <button onclick="showTabContent('appDownload')" class="bg-yellow-400 text-green-900 px-6 py-3 rounded-xl font-bold hover:bg-yellow-300 transition whitespace-nowrap shadow">ডাউনলোড পেজে যান</button>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+                        <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                            <p class="text-xs text-gray-600">মোট রেফার বোনাস:</p>
+                            <h4 id="dashRefBonus" class="text-lg font-bold text-blue-800">৳ ০.০০</h4>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded-lg border border-purple-200">
+                            <p class="text-xs text-gray-600">মোট রিচার্জ পরিমাণ:</p>
+                            <h4 id="dashTotalRecharge" class="text-lg font-bold text-purple-800">৳ ০.০০</h4>
+                        </div>
+                        <div class="bg-orange-50 p-3 rounded-lg border border-orange-200">
+                            <p class="text-xs text-gray-600">কেনা প্যাকেজ সংখ্যা (VIP):</p>
+                            <h4 id="dashVipCount" class="text-lg font-bold text-orange-800">০ টি</h4>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Active VIP Packages Summary -->
@@ -168,55 +188,55 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-green-50 p-4 rounded-xl border border-green-200">
                     <div class="bg-white p-3 rounded-lg shadow-sm border-b-4 border-pink-600 flex justify-between items-center">
                         <div>
-                            <span class="font-bold text-pink-600 text-base">বিকাশ (Personal)</span>
-                            <p id="dispBkash" class="text-lg font-extrabold text-gray-800 mt-0.5">01718059421</p>
+                            <p class="text-xs text-gray-500 font-bold">বিকাশ পার্সোনাল</p>
+                            <p id="dispBkash" class="text-lg font-bold text-pink-600 font-mono">01718059421</p>
                         </div>
-                        <button onclick="copyToClipboard(getSettings().bkash, 'বিকাশ নম্বর')" class="bg-pink-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-pink-700 transition">নম্বর কপি</button>
+                        <button onclick="copyToClipboard(document.getElementById('dispBkash').innerText, 'বিকাশ নম্বর')" class="bg-pink-600 text-white text-xs px-3 py-1.5 rounded font-bold hover:bg-pink-700">নম্বর কপি</button>
                     </div>
-                    <div class="bg-white p-3 rounded-lg shadow-sm border-b-4 border-orange-500 flex justify-between items-center">
+                    <div class="bg-white p-3 rounded-lg shadow-sm border-b-4 border-orange-600 flex justify-between items-center">
                         <div>
-                            <span class="font-bold text-orange-600 text-base">নগদ (Personal)</span>
-                            <p id="dispNagad" class="text-lg font-extrabold text-gray-800 mt-0.5">01718059421</p>
+                            <p class="text-xs text-gray-500 font-bold">নগদ পার্সোনাল</p>
+                            <p id="dispNagad" class="text-lg font-bold text-orange-600 font-mono">01718059421</p>
                         </div>
-                        <button onclick="copyToClipboard(getSettings().nagad, 'নগদ নম্বর')" class="bg-orange-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-orange-600 transition">নম্বর কপি</button>
+                        <button onclick="copyToClipboard(document.getElementById('dispNagad').innerText, 'নগদ নম্বর')" class="bg-orange-600 text-white text-xs px-3 py-1.5 rounded font-bold hover:bg-orange-700">নম্বর কপি</button>
                     </div>
                 </div>
 
-                <form onsubmit="submitRecharge(event)" class="space-y-3">
+                <form onsubmit="submitRecharge(event)" class="space-y-4">
                     <div>
-                        <label class="block text-sm font-bold mb-1">টাকা পাঠানোর মাধ্যম সিলেক্ট করুন:</label>
-                        <select id="recMethod" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600 font-semibold text-green-900 bg-white">
-                            <option value="বিকাশ">বিকাশ (bKash)</option>
-                            <option value="নগদ">নগদ (Nagad)</option>
+                        <label class="block text-sm font-bold mb-1">পেমেন্ট মাধ্যম:</label>
+                        <select id="recMethod" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600 bg-white">
+                            <option value="বিকাশ">বিকাশ (Personal)</option>
+                            <option value="নগদ">নগদ (Personal)</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold mb-1">রিচার্জের পরিমাণ:</label>
-                        <input type="number" id="recAmount" required placeholder="যেমন: ১০০০" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600">
+                        <label class="block text-sm font-bold mb-1">রিচার্জের পরিমাণ (টাকা):</label>
+                        <input type="number" id="recAmount" required placeholder="যেমন: ৫০০" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold mb-1">আপনার বিকাশ/নগদ নাম্বার:</label>
+                        <label class="block text-sm font-bold mb-1">যে নম্বর থেকে টাকা পাঠিয়েছেন:</label>
                         <input type="text" id="recPhone" required placeholder="017xxxxxxxx" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600">
                     </div>
                     <div>
                         <label class="block text-sm font-bold mb-1">ট্রানজেকশন আইডি (TrxID):</label>
-                        <input type="text" id="recTrx" required placeholder="যেমন: 9N7A..." class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600">
+                        <input type="text" id="recTrx" required placeholder="যেমন: 9N78X..." class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600">
                     </div>
-                    <button type="submit" class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-800 transition">রিচার্জ নিশ্চিত করুন (Pending)</button>
+                    <button type="submit" class="w-full bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-800 transition">রিচার্জ রিকোয়েস্ট পাঠান (Pending)</button>
                 </form>
             </div>
 
             <!-- TAB 3: WITHDRAW -->
             <div id="tabWithdraw" class="bg-white rounded-xl shadow p-6 hidden space-y-4">
-                <h3 class="text-xl font-bold text-green-900">টাকা উত্তোলন (Withdraw)</h3>
-                <p class="text-sm text-gray-600">সর্বনিম্ন উত্তোলন ১৫০ টাকা। (উত্তোলন চার্জ ১০%, রিচার্জ বাধ্যতামূলক)</p>
-                
-                <form onsubmit="submitWithdraw(event)" class="space-y-3">
+                <h3 class="text-xl font-bold text-green-900">টাকা উত্তোলন (উইথড্র) করুন</h3>
+                <p class="text-sm text-gray-600">আপনার একাউন্টের ব্যালেন্স থেকে বিকাশ বা নগদে টাকা উত্তোলন করুন:</p>
+
+                <form onsubmit="submitWithdraw(event)" class="space-y-4">
                     <div>
-                        <label class="block text-sm font-bold mb-1">উত্তোলনের মাধ্যম নির্বাচন করুন:</label>
-                        <select id="wdMethod" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600 font-semibold text-green-900 bg-white">
-                            <option value="বিকাশ">বিকাশ (Personal)</option>
-                            <option value="নগদ">নগদ (Personal)</option>
+                        <label class="block text-sm font-bold mb-1">উত্তোলনের মাধ্যম:</label>
+                        <select id="wdMethod" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-600 bg-white">
+                            <option value="বিকাশ">বিকাশ</option>
+                            <option value="নগদ">নগদ</option>
                         </select>
                     </div>
                     <div>
@@ -250,11 +270,11 @@
                 <div class="grid md:grid-cols-2 gap-4" id="vipPackagesContainer"></div>
             </div>
 
-            <!-- TAB 6: REFERRAL & SUPPORT -->
+            <!-- TAB 6: REFERRAL & USER DETAILS -->
             <div id="tabRefer" class="bg-white rounded-xl shadow p-6 hidden space-y-6">
                 <div>
-                    <h3 class="text-xl font-bold text-green-900 mb-2">👥 রেফার করুন এবং ২০% কমিশন নিন</h3>
-                    <p class="text-sm text-gray-600 mb-4">আপনার বন্ধুদের সাথে রেফার কোড বা লিংক শেয়ার করুন। তারা রিচার্জ করলেই আপনি সাথে সাথে ২০% বোনাস পেয়ে যাবেন!</p>
+                    <h3 class="text-xl font-bold text-green-900 mb-2">👥 রেফার করুন এবং ৩ জেনারেশন কমিশন নিন</h3>
+                    <p class="text-sm text-gray-600 mb-4">আপনার বন্ধুদের সাথে রেফার কোড বা লিংক শেয়ার করুন। লেভেল ১ (২০%), লেভেল ২ (২%) এবং লেভেল ৩ (১%) কমিশন পেয়ে যাবেন!</p>
                     
                     <div class="space-y-3">
                         <div>
@@ -271,6 +291,15 @@
                     </div>
                 </div>
 
+                <!-- Referred Users Detailed Stats Section -->
+                <div class="border-t pt-4">
+                    <h3 class="text-lg font-bold text-green-900 mb-2">📋 আপনার রেফারে যারা যুক্ত হয়েছে তাদের বিবরণ:</h3>
+                    <p class="text-xs text-gray-600 mb-3">কোন ইউজার কত টাকা রিচার্জ করেছে, উত্তোলন করেছে এবং কোন প্যাকেজ কিনেছে তা নিচে দেখতে পাবেন:</p>
+                    <div id="referredUsersTableContainer" class="space-y-3 max-h-60 overflow-y-auto">
+                        <p class="text-sm text-gray-500">এখনো কোনো ইউজার আপনার রেফারে যুক্ত হয়নি।</p>
+                    </div>
+                </div>
+
                 <div class="border-t pt-4">
                     <h3 class="text-lg font-bold text-green-900 mb-2">📞 হেল্পলাইন ও সাপোর্ট</h3>
                     <p class="text-sm text-gray-600 mb-3">যেকোনো সমস্যায় আমাদের টেলিগ্রাম গ্রুপে বা সরাসরি সাপোর্টে যোগাযোগ করুন:</p>
@@ -281,28 +310,7 @@
                 </div>
             </div>
 
-            <!-- TAB 7: APP DOWNLOAD -->
-            <div id="tabAppDownload" class="bg-white rounded-xl shadow p-6 hidden space-y-6 text-center">
-                <div class="max-w-md mx-auto space-y-4">
-                    <div class="w-24 h-24 bg-green-100 rounded-3xl mx-auto flex items-center justify-center shadow-inner">
-                        <span class="text-5xl">🌱</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-green-900">Starbucks BD অফিসিয়াল অ্যাপ</h3>
-                    <p class="text-sm text-gray-600">আমাদের অ্যান্ড্রয়েড অ্যাপ ইনস্টল করে আরও দ্রুত ও নিরাপদে অ্যাকাউন্ট পরিচালনা করুন।</p>
-                    
-                    <div class="bg-green-50 p-4 rounded-xl border border-green-200 text-left text-xs space-y-1 text-gray-700 font-medium">
-                        <p>✅ ফাইলের নাম: StarbucksBD.apk</p>
-                        <p>✅ সাইজ: ১৫ মেগাবাইট (15 MB)</p>
-                        <p>✅ অ্যান্ড্রয়েড ভার্সন: ৫.০ বা তার বেশি</p>
-                    </div>
-
-                    <a href="StarbucksBD.apk" download="StarbucksBD.apk" class="block w-full bg-green-700 text-white font-bold py-3.5 rounded-xl hover:bg-green-800 transition shadow-lg text-center">
-                        📥 সরাসরি অ্যাপ ডাউনলোড করুন (APK)
-                    </a>
-                </div>
-            </div>
-
-            <!-- TAB 8: ADMIN PANEL -->
+            <!-- TAB 7: ADMIN PANEL -->
             <div id="tabAdmin" class="bg-white rounded-xl shadow p-6 hidden space-y-6">
                 <div class="flex justify-between items-center border-b pb-3">
                     <h3 class="text-xl font-bold text-red-700">⚙️ অ্যাডমিন প্যানেল (কন্ট্রোল ও ম্যানেজমেন্ট)</h3>
@@ -420,13 +428,17 @@
                 phone: ADMIN_PHONE,
                 pass: ADMIN_PASS,
                 referCode: "STARBD",
-                balance: 0,
+                balance: 115.00,
                 totalRecharge: 0,
                 totalWithdraw: 0,
                 activePackages: [],
                 lastCheckInTime: 0,
                 regTime: new Date().toLocaleString(),
-                referredBy: null
+                referredBy: null,
+                level1Count: 0,
+                level2Count: 0,
+                level3Count: 0,
+                refBonus: 0.00
             });
             localStorage.setItem('sb_users', JSON.stringify(users));
         }
@@ -550,6 +562,17 @@
             let refLink = window.location.origin + window.location.pathname + `?ref=${user.referCode || "STARBD"}`;
             document.getElementById('referralLinkInput').value = refLink;
 
+            // Dashboard 3 Generation stats display
+            document.getElementById('dashLvl1').innerText = (user.level1Count || 0) + " জন";
+            document.getElementById('dashLvl2').innerText = (user.level2Count || 0) + " জন";
+            document.getElementById('dashLvl3').innerText = (user.level3Count || 0) + " জন";
+            document.getElementById('dashRefBonus').innerText = `৳ ${(user.refBonus || 0).toFixed(2)}`;
+            document.getElementById('dashTotalRecharge').innerText = `৳ ${(user.totalRecharge || 0).toFixed(2)}`;
+            document.getElementById('dashVipCount').innerText = (user.activePackages ? user.activePackages.length : 0) + " টি";
+
+            // Render Referred Users List Table/Cards
+            renderReferredUsersList(user);
+
             let adminNav = document.getElementById('adminNavBtn');
             let adminQuickBtn = document.getElementById('adminQuickBtnContainer');
 
@@ -570,6 +593,37 @@
             showTabContent('home');
         }
 
+        function renderReferredUsersList(user) {
+            let container = document.getElementById('referredUsersTableContainer');
+            let myReferrals = users.filter(u => u.referredBy === user.phone);
+
+            if (myReferrals.length === 0) {
+                container.innerHTML = `<p class="text-sm text-gray-500">এখনো কোনো ইউজার আপনার রেফারে যুক্ত হয়নি।</p>`;
+                return;
+            }
+
+            container.innerHTML = "";
+            myReferrals.forEach((refUser, idx) => {
+                let pkgNames = refUser.activePackages && refUser.activePackages.length > 0 
+                    ? refUser.activePackages.map(p => p.name).join(', ') 
+                    : 'কোনো প্যাকেজ নেই';
+
+                container.innerHTML += `
+                    <div class="bg-green-50 p-3 rounded-lg border border-green-200 text-xs space-y-1">
+                        <div class="flex justify-between font-bold text-green-900">
+                            <span>${idx + 1}. ${refUser.name} (${refUser.phone})</span>
+                            <span class="text-gray-500">রেজি: ${refUser.regTime || 'প্রযোজ্য নয়'}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-gray-700 pt-1">
+                            <div>• মোট রিচার্জ: <span class="font-bold text-green-700">৳${refUser.totalRecharge || 0}</span></div>
+                            <div>• মোট উত্তোলন: <span class="font-bold text-orange-700">৳${refUser.totalWithdraw || 0}</span></div>
+                        </div>
+                        <div>• কেনা প্যাকেজ: <span class="font-semibold text-purple-700">${pkgNames}</span></div>
+                    </div>
+                `;
+            });
+        }
+
         function handleRegister(e) {
             e.preventDefault();
             let name = document.getElementById('regName').value;
@@ -588,6 +642,7 @@
             }
 
             let referrerPhone = null;
+
             if (ref) {
                 if (ref === phone) {
                     alert("আপনি নিজের রেফার কোড ব্যবহার করতে পারবেন না!");
@@ -600,6 +655,23 @@
                 }
                 if (referrer) {
                     referrerPhone = referrer.phone;
+                    referrer.level1Count = (referrer.level1Count || 0) + 1;
+
+                    // Level 2
+                    if (referrer.referredBy) {
+                        let referrer2 = getUser(referrer.referredBy);
+                        if (referrer2) {
+                            referrer2.level2Count = (referrer2.level2Count || 0) + 1;
+
+                            // Level 3
+                            if (referrer2.referredBy) {
+                                let referrer3 = getUser(referrer2.referredBy);
+                                if (referrer3) {
+                                    referrer3.level3Count = (referrer3.level3Count || 0) + 1;
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -615,7 +687,11 @@
                 activePackages: [],
                 lastCheckInTime: 0,
                 regTime: regTimeStr,
-                referredBy: referrerPhone
+                referredBy: referrerPhone,
+                level1Count: 0,
+                level2Count: 0,
+                level3Count: 0,
+                refBonus: 0.00
             };
 
             users.push(newUser);
@@ -625,8 +701,6 @@
 
             let smsText = `আসসালামু আলাইকুম ${name} স্যার, আপনার একাউন্টটি সফলভাবে রেজিস্ট্রেশন সম্পন্ন হয়েছে তাই বসে না থেকে এখনই আপনারা কাজ শুরু করে দিন। আমরা বিশ্বাসের সাথে কাজ করতেছি এবং করবো আপনারা পাশে থাকবেন ধন্যবাদ`;
             sendSmsToUser(phone, smsText);
-
-            alert(`📩 [অফিসিয়াল SMS (${ADMIN_PHONE}) থেকে আপনার নম্বরে (${phone}) পাঠানো হয়েছে]:\n\n${smsText}`);
 
             alert("সফলভাবে একাউন্ট তৈরি হয়েছে এবং ১৫০ টাকা বোনাস যোগ হয়েছে!");
             currentPhone = phone;
@@ -658,8 +732,9 @@
         }
 
         function showTabContent(tabName) {
-            ['tabHome', 'tabRecharge', 'tabWithdraw', 'tabSmsInbox', 'tabVip', 'tabRefer', 'tabAppDownload', 'tabAdmin'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
+            ['tabHome', 'tabRecharge', 'tabWithdraw', 'tabSmsInbox', 'tabVip', 'tabRefer', 'tabAdmin'].forEach(id => {
+                let el = document.getElementById(id);
+                if(el) el.classList.add('hidden');
             });
 
             if(tabName === 'home') document.getElementById('tabHome').classList.remove('hidden');
@@ -670,8 +745,11 @@
                 renderSmsInbox();
             }
             if(tabName === 'vip') document.getElementById('tabVip').classList.remove('hidden');
-            if(tabName === 'refer') document.getElementById('tabRefer').classList.remove('hidden');
-            if(tabName === 'appDownload') document.getElementById('tabAppDownload').classList.remove('hidden');
+            if(tabName === 'refer') {
+                document.getElementById('tabRefer').classList.remove('hidden');
+                let user = getUser(currentPhone);
+                if(user) renderReferredUsersList(user);
+            }
             if(tabName === 'admin') {
                 if (currentPhone !== ADMIN_PHONE) {
                     alert("আপনার অ্যাডমিন অ্যাক্সেস নেই!");
@@ -760,8 +838,6 @@
             let smsText = `আসসালামু আলাইকুম স্যার আপনার রিচার্জ সম্পন্ন হয়েছে দয়া করে একটু অপেক্ষা করুন আমরা চেকিং করে সবকিছু ঠিক থাকলে ইনশাআল্লাহ ২ মিনিটের ভিতরে একাউন্টে টাকা যুক্ত হয়ে যাবে ধন্যবাদ`;
             sendSmsToUser(user.phone, smsText);
 
-            alert(`📩 [অফিসিয়াল SMS (${ADMIN_PHONE}) থেকে আপনার নম্বরে পাঠানো হয়েছে]:\n\n${smsText}`);
-
             alert("রিচার্জ রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে। (স্ট্যাটাস: Pending)");
             document.getElementById('recAmount').value = '';
             document.getElementById('recPhone').value = '';
@@ -820,8 +896,6 @@
 
             let smsText = `আসসালামু আলাইকুম আপনার উত্তোলন সফল হয়েছে দয়া করে একটু অপেক্ষা করুন দুই থেকে এক মিনিটের ভিতরেই পেমেন্ট পেয়ে যাবেন ধন্যবাদ`;
             sendSmsToUser(user.phone, smsText);
-
-            alert(`📩 [অফিসিয়াল SMS (${ADMIN_PHONE}) থেকে আপনার নম্বরে পাঠানো হয়েছে]:\n\n${smsText}`);
 
             alert("উত্তোলন রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে এবং ব্যালেন্স থেকে টাকা কেটে নেওয়া হয়েছে। (স্ট্যাটাস: Pending)");
             document.getElementById('wdAmount').value = '';
@@ -923,12 +997,34 @@
                 user.balance += r.amount;
                 user.totalRecharge += r.amount;
 
+                // 3 Generation Referral Commission (Level 1: 20%, Level 2: 2%, Level 3: 1%)
                 if (user.referredBy) {
-                    let referrer = getUser(user.referredBy);
-                    if (referrer) {
-                        let commission = r.amount * 0.20;
-                        referrer.balance += commission;
-                        sendTelegramMessage(`👥 *রেফার কমিশন যুক্ত হয়েছে!*\n\n🎁 রেফারকারী: ${referrer.name} (${referrer.phone})\n💰 কমিশন: ${commission} ৳ (ইউজার ${user.name} এর রিচার্জ থেকে)`);
+                    let referrer1 = getUser(user.referredBy);
+                    if (referrer1) {
+                        let comm1 = r.amount * 0.20;
+                        referrer1.balance += comm1;
+                        referrer1.refBonus = (referrer1.refBonus || 0) + comm1;
+                        sendTelegramMessage(`👥 *লেভেল ১ রেফার কমিশন (২০%) যুক্ত হয়েছে!*\n\n🎁 রেফারকারী: ${referrer1.name} (${referrer1.phone})\n💰 কমিশন: ${comm1} ৳ (ইউজার ${user.name} এর রিচার্জ থেকে)`);
+
+                        // Level 2 (2%)
+                        if (referrer1.referredBy) {
+                            let referrer2 = getUser(referrer1.referredBy);
+                            if (referrer2) {
+                                let comm2 = r.amount * 0.02;
+                                referrer2.balance += comm2;
+                                referrer2.refBonus = (referrer2.refBonus || 0) + comm2;
+
+                                // Level 3 (1%)
+                                if (referrer2.referredBy) {
+                                    let referrer3 = getUser(referrer2.referredBy);
+                                    if (referrer3) {
+                                        let comm3 = r.amount * 0.01;
+                                        referrer3.balance += comm3;
+                                        referrer3.refBonus = (referrer3.refBonus || 0) + comm3;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
