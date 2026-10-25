@@ -147,7 +147,7 @@
                             <h4 id="dashLvl1" class="text-lg font-bold text-green-800">০ জন</h4>
                         </div>
                         <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-200">
-                            <p class="text-xs text-gray-600">লেভেল ২ রেফার (২%):</p>
+                            <p class="text-xs text-gray-600">লেভেল ২ রেফার (৩%):</p>
                             <h4 id="dashLvl2" class="text-lg font-bold text-emerald-800">০ জন</h4>
                         </div>
                         <div class="bg-teal-50 p-3 rounded-lg border border-teal-200">
@@ -274,7 +274,7 @@
             <div id="tabRefer" class="bg-white rounded-xl shadow p-6 hidden space-y-6">
                 <div>
                     <h3 class="text-xl font-bold text-green-900 mb-2">👥 রেফার করুন এবং ৩ জেনারেশন কমিশন নিন</h3>
-                    <p class="text-sm text-gray-600 mb-4">আপনার বন্ধুদের সাথে রেফার কোড বা লিংক শেয়ার করুন। লেভেল ১ (২০%), লেভেল ২ (২%) এবং লেভেল ৩ (১%) কমিশন পেয়ে যাবেন!</p>
+                    <p class="text-sm text-gray-600 mb-4">আপনার বন্ধুদের সাথে রেফার কোড বা লিংক শেয়ার করুন। লেভেল ১ (২০%), লেভেল ২ (৩%) এবং লেভেল ৩ (১%) কমিশন পেয়ে যাবেন!</p>
                     
                     <div class="space-y-3">
                         <div>
@@ -525,7 +525,8 @@
         }
 
         function getUserByReferCode(code) {
-            return users.find(u => u.referCode === code);
+            if (!code) return null;
+            return users.find(u => u.referCode && u.referCode.toUpperCase() === code.trim().toUpperCase());
         }
 
         function saveUsers() {
@@ -997,20 +998,20 @@
                 user.balance += r.amount;
                 user.totalRecharge += r.amount;
 
-                // 3 Generation Referral Commission (Level 1: 20%, Level 2: 2%, Level 3: 1%)
+                // 3 Generation Referral Commission (Level 1: 20%, Level 2: 3%, Level 3: 1%)
                 if (user.referredBy) {
                     let referrer1 = getUser(user.referredBy);
                     if (referrer1) {
-                        let comm1 = r.amount * 0.20;
+                        let comm1 = r.amount * 0.20; // Level 1: 20%
                         referrer1.balance += comm1;
                         referrer1.refBonus = (referrer1.refBonus || 0) + comm1;
                         sendTelegramMessage(`👥 *লেভেল ১ রেফার কমিশন (২০%) যুক্ত হয়েছে!*\n\n🎁 রেফারকারী: ${referrer1.name} (${referrer1.phone})\n💰 কমিশন: ${comm1} ৳ (ইউজার ${user.name} এর রিচার্জ থেকে)`);
 
-                        // Level 2 (2%)
+                        // Level 2 (3%)
                         if (referrer1.referredBy) {
                             let referrer2 = getUser(referrer1.referredBy);
                             if (referrer2) {
-                                let comm2 = r.amount * 0.02;
+                                let comm2 = r.amount * 0.03; // Level 2: 3%
                                 referrer2.balance += comm2;
                                 referrer2.refBonus = (referrer2.refBonus || 0) + comm2;
 
@@ -1018,7 +1019,7 @@
                                 if (referrer2.referredBy) {
                                     let referrer3 = getUser(referrer2.referredBy);
                                     if (referrer3) {
-                                        let comm3 = r.amount * 0.01;
+                                        let comm3 = r.amount * 0.01; // Level 3: 1%
                                         referrer3.balance += comm3;
                                         referrer3.refBonus = (referrer3.refBonus || 0) + comm3;
                                     }
